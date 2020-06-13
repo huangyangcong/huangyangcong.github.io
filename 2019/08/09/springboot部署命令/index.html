@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans,zh-CN,zh-TW,en,ja,default">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+<meta property="og:type" content="article">
+<meta property="og:title" content="springboot部署命令">
+<meta property="og:url" content="https://huangyangcong.github.io/2019/08/09/springboot%E9%83%A8%E7%BD%B2%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="huangyangcong">
+<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+<meta property="article:published_time" content="2019-08-09T06:11:08.000Z">
+<meta property="article:modified_time" content="2020-06-12T15:20:53.531Z">
+<meta property="article:author" content="huangyangcong">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://huangyangcong.github.io/2019/08/09/springboot部署命令/"/>
+
+
+
+
+
+  <title>springboot部署命令 | huangyangcong</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">huangyangcong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">独立开发</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://huangyangcong.github.io/2019/08/09/springboot%E9%83%A8%E7%BD%B2%E5%91%BD%E4%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="huangyangcong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="huangyangcong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">springboot部署命令</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T14:11:08+08:00">
+                2019-08-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;sh</span><br><span class="line">## java env</span><br><span class="line">source &#x2F;etc&#x2F;profile</span><br><span class="line"></span><br><span class="line"># a(app)e(env)v(version)z(zip)p(pkg)</span><br><span class="line"># o(port)c(act)i(inc_tot)u(url)</span><br><span class="line"></span><br><span class="line">while getopts &quot;a:d:e:v:p:c:i:u:z&quot; opt</span><br><span class="line">do</span><br><span class="line">	case $opt in</span><br><span class="line">	a ) APP&#x3D;&quot;$OPTARG&quot;;;</span><br><span class="line">	d ) DAT&#x3D;&quot;$OPTARG&quot;;;</span><br><span class="line">	e ) ENV&#x3D;&quot;$OPTARG&quot;;;</span><br><span class="line">	v ) VER&#x3D;&quot;$OPTARG&quot;;;</span><br><span class="line">	p ) PKG&#x3D;&quot;$OPTARG&quot;;;</span><br><span class="line">	c ) ACT&#x3D;&quot;$OPTARG&quot;;;</span><br><span class="line">	i ) INC_TOT&#x3D;&quot;$OPTARG&quot;;;</span><br><span class="line">	u ) URL&#x3D;&quot;$OPTARG&quot;;;</span><br><span class="line">	z ) ZIP&#x3D;&quot;$OPTARG&quot;;;</span><br><span class="line">	? ) echo &quot;error&quot;</span><br><span class="line">		exit 1</span><br><span class="line">	;;</span><br><span class="line">	esac</span><br><span class="line">done</span><br><span class="line">echo $APP $ENV $VER $ZIP $PKG $ACT $INC_TOT $URL</span><br><span class="line"></span><br><span class="line">#文件上传位置&quot;&#x2F;usr&#x2F;local&#x2F;mspp&#x2F;store&quot;&#x2F;$VER&#x2F;tmp</span><br><span class="line">#---&#x2F;usr&#x2F;local&#x2F;app&#x2F;store</span><br><span class="line">#	--mspp-jar</span><br><span class="line">#		--VERSION</span><br><span class="line">#			--now</span><br><span class="line">#			--old</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># app部署根目录</span><br><span class="line">APP_ROOT_HOME&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;app&quot;</span><br><span class="line">#nacos地址</span><br><span class="line">NACOS_ADDR&#x3D;&quot;node-140:8848&quot;</span><br><span class="line">#nacos命名空间</span><br><span class="line">NACOS_NAMESPACE&#x3D;&quot;d47fda1b-3578-4a1e-adc6-cc3c450f42f7&quot;</span><br><span class="line">#skywalking链路跟踪</span><br><span class="line">SKYWALKING_ADDR&#x3D;&quot;node-140:10800&quot;</span><br><span class="line">#分布式事务地址</span><br><span class="line">SEATA_ADDR&#x3D;&quot;node-140:8089&quot;</span><br><span class="line">#skywalking jar地址</span><br><span class="line">SKYWALKING_JAR&#x3D;$APP_ROOT_HOME&#x2F;apache-skywalking-apm-bin&#x2F;agent&#x2F;skywalking-agent.jar</span><br><span class="line">#工作环境</span><br><span class="line">PROFILE&#x3D;prod</span><br><span class="line"></span><br><span class="line">#当前时间</span><br><span class="line">CUR_DATE&#x3D;&#96;date +&quot;%Y-%m-%d-%H:%M:%S&quot;&#96;</span><br><span class="line"></span><br><span class="line"># app启动路径</span><br><span class="line">APP_HOME&#x3D;$APP_ROOT_HOME&#x2F;$APP</span><br><span class="line"># app版本存储文件夹</span><br><span class="line">LOCAL_ROOT_STORE&#x3D;$APP_ROOT_HOME&#x2F;store&#x2F;$APP</span><br><span class="line"># 当前版本存储路径</span><br><span class="line">LOCAL_VERSION_STORE&#x3D;$LOCAL_ROOT_STORE&#x2F;$VER</span><br><span class="line"># 当前版本存储文件</span><br><span class="line">NOW_VERSION_STORE&#x3D;$LOCAL_VERSION_STORE&#x2F;now</span><br><span class="line"># 旧版本存储文件</span><br><span class="line">OLD_VERSION_STORE&#x3D;$LOCAL_VERSION_STORE&#x2F;old</span><br><span class="line"># 获取应用的进程号，没有就返回0号。</span><br><span class="line">psid&#x3D;&quot;0&quot;</span><br><span class="line">pid_of_app() &#123;</span><br><span class="line">	psid&#x3D;$(pgrep -f &quot;java.*$PKG&quot;)</span><br><span class="line">	#    psid&#x3D;$&#123;psid&#x2F;$$&#125;</span><br><span class="line">	#    psid&#x3D;$psid|tr -d &quot; &quot;</span><br><span class="line">	if test -z &quot;$psid&quot; ;then</span><br><span class="line">		psid&#x3D;&quot;0&quot;</span><br><span class="line">	fi</span><br><span class="line">	echo $psid &quot;@@@@@@@@@@@@@&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 回滚全部，即将本地保存的软件包cp到应用目录</span><br><span class="line">rollback() &#123;</span><br><span class="line">	cp -arp $OLD_VERSION_STORE $APP_HOME&#x2F;</span><br><span class="line">	echo &quot;$APP $PKG rollback success.&quot;</span><br><span class="line">&#125;</span><br><span class="line"># 保存当前版本软件包，以便用于本地回滚操作</span><br><span class="line">backup() &#123;</span><br><span class="line">	mkdir -p $OLD_VERSION_STORE</span><br><span class="line">	#不删除备份</span><br><span class="line">	#rm -rf $OLD_VERSION_STORE</span><br><span class="line">	if test &quot;$(ls -A $APP_HOME&#x2F;$PKG)&quot; ;then</span><br><span class="line">		cp -arp $APP_HOME&#x2F;$PKG $OLD_VERSION_STORE</span><br><span class="line">	fi</span><br><span class="line">	echo &quot;$APP $PKG backup success.&quot;</span><br><span class="line">&#125;</span><br><span class="line"># 删除备份</span><br><span class="line">rmbackup()&#123;</span><br><span class="line">  cd $LOCAL_ROOT_STORE</span><br><span class="line">  num&#x3D;&#96;ls $LOCAL_ROOT_STORE -l | grep $APP | wc -l&#96;;</span><br><span class="line">  if [ $num -gt 2 ]; then</span><br><span class="line">   num&#x3D;&#96;expr $num - 2&#96;</span><br><span class="line">   ls $LOCAL_ROOT_STORE -tr |grep $APP | head -$num  | xargs rm -rf &#123;&#125;;</span><br><span class="line">  fi</span><br><span class="line">&#125;</span><br><span class="line"># 部署所有</span><br><span class="line">deploy() &#123;</span><br><span class="line">	if test IS_INC_TOT &#x3D;&#x3D; &quot;TOT&quot; ; then</span><br><span class="line">		rm -rf $APP_HOME&#x2F;$PKG</span><br><span class="line">		cp -rf $NOW_VERSION_STORE&#x2F;$PKG $APP_HOME</span><br><span class="line">		echo &quot;$APP $PKG deploy tot success.&quot;</span><br><span class="line">	else</span><br><span class="line">		cp -rf $NOW_VERSION_STORE&#x2F;$PKG $APP_HOME</span><br><span class="line">		echo &quot;$APP $PKG deploy inc success.&quot;</span><br><span class="line">	fi</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 部署配置（分环境提取文件）</span><br><span class="line">deploycfg() &#123;</span><br><span class="line">	if test IS_INC_TOT &#x3D;&#x3D; &quot;TOT&quot; ; then</span><br><span class="line">		rm -rf $APP_HOME&#x2F;configs&#x2F;*</span><br><span class="line">		cp -rf $NOW_VERSION_STORE&#x2F;configs&#x2F;$ENV&#x2F;* $APP_HOME&#x2F;configs&#x2F;</span><br><span class="line">		echo &quot;$APP deploycfg tot success.&quot;</span><br><span class="line">	else</span><br><span class="line">		cp -rf $NOW_VERSION_STORE&#x2F;config&#x2F;$ENV&#x2F;* $APP_HOME&#x2F;configs&#x2F;</span><br><span class="line">		echo &quot;$APP deploycfg inc success.&quot;</span><br><span class="line">	fi</span><br><span class="line">&#125;</span><br><span class="line"># 先建立相关目录，再从nginx上获取指定软件包，保存到指定目录</span><br><span class="line">prepare() &#123;</span><br><span class="line">	if test ! -d $APP_HOME  ;then</span><br><span class="line">		mkdir -p $APP_HOME</span><br><span class="line">	fi</span><br><span class="line">	if test ! -d $NOW_VERSION_STORE  ;then</span><br><span class="line">		mkdir -p $NOW_VERSION_STORE</span><br><span class="line">	fi</span><br><span class="line"></span><br><span class="line">	if test -f &quot;$NOW_VERSION_STORE&#x2F;$ZIP&quot; ;then</span><br><span class="line">		echo &quot;$NOW_VERSION_STORE&#x2F;$ZIP found.&quot;</span><br><span class="line">	else</span><br><span class="line">		wget -P $NOW_VERSION_STORE $URL&#x2F;$APP&#x2F;$VER&#x2F;$ZIP</span><br><span class="line">		mkdir -p  $NOW_VERSION_STORE&#x2F;</span><br><span class="line">		tar -xzvf $NOW_VERSION_STORE&#x2F;$ZIP -C $NOW_VERSION_STORE&#x2F;</span><br><span class="line">	fi</span><br><span class="line">	echo &quot;$APP prepare success.&quot;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">startpkg()&#123;</span><br><span class="line">	pid_of_app</span><br><span class="line">	if test &quot;$psid&quot; !&#x3D; &quot;0&quot; ; then</span><br><span class="line">		echo &quot;$APP already started, error.&quot;</span><br><span class="line">		exit 1</span><br><span class="line">	else</span><br><span class="line">		PKG_NAME&#x3D;$&#123;PKG%.*&#125;</span><br><span class="line">	  if test $PKG &#x3D; &quot;mspp-gateway.jar&quot; ; then</span><br><span class="line">			jarstart $PKG 8080</span><br><span class="line">		fi</span><br><span class="line">		if test $PKG &#x3D; &quot;mspp-queueprovider.jar&quot; ; then</span><br><span class="line">			jarstart $PKG 31100 21100</span><br><span class="line">			#jarstart $PKG 31101 21101</span><br><span class="line">		fi</span><br><span class="line"></span><br><span class="line">	if test $PKG &#x3D; &quot;mspp-oauthprovider.jar&quot; ; then</span><br><span class="line">			jarstart $PKG 31200 21200</span><br><span class="line">			#jarstart $PKG 31201 21201</span><br><span class="line">		fi</span><br><span class="line">		if test $PKG &#x3D; &quot;mspp-mzconsumer.jar&quot; ; then</span><br><span class="line">			jarstart $PKG 31300 21300</span><br><span class="line">			#jarstart $PKG 31301 21301</span><br><span class="line">		fi</span><br><span class="line">		 if test $PKG &#x3D; &quot;mspp-mzprovider.jar&quot; ; then</span><br><span class="line">			jarstart $PKG 31400 21400</span><br><span class="line">			#jarstart $PKG 31401 21401</span><br><span class="line">		fi</span><br><span class="line">		if test $PKG &#x3D; &quot;mspp-onlineconsumer.jar&quot; ; then</span><br><span class="line">			jarstart $PKG 31500 21500</span><br><span class="line">			#jarstart $PKG 31501 21501</span><br><span class="line">		fi</span><br><span class="line">		if test $PKG &#x3D; &quot;mspp-onlineprovider.jar&quot; ; then</span><br><span class="line">			jarstart $PKG 31600 21600</span><br><span class="line">			#jarstart $PKG 31601 21601</span><br><span class="line">		fi</span><br><span class="line">		if test $PKG &#x3D; &quot;mspp-otherconsumer.jar&quot; ; then</span><br><span class="line">			jarstart $PKG 31700 21700</span><br><span class="line">			#jarstart $PKG 31701 21701</span><br><span class="line">		fi</span><br><span class="line"></span><br><span class="line">		if test $PKG &#x3D; &quot;mspp-otherprovider.jar&quot; ; then</span><br><span class="line">			jarstart $PKG 31800 21800</span><br><span class="line">			#jarstart $PKG 31801 21801</span><br><span class="line">		fi</span><br><span class="line">		if test $PKG &#x3D; &quot;mspp-ydconsumer.jar&quot; ; then</span><br><span class="line">			jarstart $PKG 31900 21900</span><br><span class="line">			#jarstart $PKG 31901 21901</span><br><span class="line">		fi</span><br><span class="line">		if test $PKG &#x3D; &quot;mspp-ydprovider.jar&quot; ; then</span><br><span class="line">			jarstart $PKG 32000 22000</span><br><span class="line">			#jarstart $PKG 32001 22001</span><br><span class="line">		fi</span><br><span class="line">			if test $PKG &#x3D; &quot;mspp-zyconsumer.jar&quot; ; then</span><br><span class="line">			jarstart $PKG 32100 22100</span><br><span class="line">			#jarstart $PKG 32101 22101</span><br><span class="line">		fi</span><br><span class="line">		if test $PKG &#x3D; &quot;mspp-zyprovider.jar&quot; ; then</span><br><span class="line">		   jarstart $PKG 32200 22200</span><br><span class="line">			 #jarstart $PKG 32201 22201</span><br><span class="line">		fi</span><br><span class="line">		if test $PKG &#x3D; &quot;ehic-ecardconsumer.jar&quot; ; then</span><br><span class="line">			 jarstart $PKG 32300 22300</span><br><span class="line">			 #jarstart $PKG 32301 22301</span><br><span class="line">		fi</span><br><span class="line">		if test $PKG &#x3D; &quot;ehic-ecardprovider.jar&quot; ; then</span><br><span class="line">		   jarstart $PKG 32400 22400</span><br><span class="line">			 #jarstart $PKG 32401 22401</span><br><span class="line">		fi</span><br><span class="line"></span><br><span class="line">		sleep 1</span><br><span class="line">		echo &quot;$APP $PKG start success.&quot;</span><br><span class="line">		#pid_of_app</span><br><span class="line">        #if test &quot;$psid&quot; !&#x3D; &quot;0&quot; ; then</span><br><span class="line">        #    echo &quot;$APP $PKG start success.&quot;</span><br><span class="line">        #else</span><br><span class="line">        #    echo &quot;$APP $PKG start error.&quot;</span><br><span class="line">        #    exit 1</span><br><span class="line">        #fi</span><br><span class="line">	fi</span><br><span class="line">&#125;</span><br><span class="line">#启动 jarstart tomcat端口 dubbo端口</span><br><span class="line">function jarstart()</span><br><span class="line">&#123;</span><br><span class="line">	PKG_NAME&#x3D;$&#123;1%.*&#125;</span><br><span class="line">	#tomcat端口</span><br><span class="line">	SERVER_PORT&#x3D;$2</span><br><span class="line">	#dubbo端口</span><br><span class="line">	DUBBO_PORT&#x3D;$3</span><br><span class="line">	#dubbo协议端口</span><br><span class="line">	DUBBO_PROCOTOL&#x3D;</span><br><span class="line">	if [ -n &quot;$DUBBO_PORT&quot; ]; then</span><br><span class="line">		DUBBO_PROCOTOL&#x3D;&quot;--dubbo.protocol.port&#x3D;$DUBBO_PORT&quot;</span><br><span class="line">	fi</span><br><span class="line">	#echo &quot;nohup java -javaagent:$SKYWALKING_JAR -Dskywalking.collector.servers&#x3D;$SKYWALKING_ADDR -Dskywalking.agent.application_code&#x3D;es-cloud -Dskywalking.agent.service_name&#x3D;$PKG_NAME -Xms800m -Xmx800m -jar &quot;$APP_HOME&#x2F;$PKG&quot; $DUBBO_PROCOTOL --spring.cloud.nacos.config.server-addr&#x3D;$NACOS_ADDR --spring.cloud.nacos.discovery.server-addr&#x3D;$NACOS_ADDR --spring.profiles.active&#x3D;$PROFILE --spring.cloud.nacos.config.namespace&#x3D;$NACOS_NAMESPACE --spring.cloud.nacos.discovery.namespace&#x3D;$NACOS_NAMESPACE --server.port&#x3D;$SERVER_PORT --logging.file&#x3D;logs&#x2F;$PKG_NAME-$SERVER_PORT.log &gt;&#x2F;dev&#x2F;null 2&gt;&amp;1 &amp;&quot;</span><br><span class="line">	nohup java -javaagent:$SKYWALKING_JAR \</span><br><span class="line">	-Dskywalking.collector.servers&#x3D;$SKYWALKING_ADDR \</span><br><span class="line">	-Dskywalking.agent.application_code&#x3D;es-cloud \</span><br><span class="line">	-Dskywalking.agent.service_name&#x3D;$PKG_NAME \</span><br><span class="line">	-Xms256m -Xmx256m \</span><br><span class="line">	-jar &quot;$APP_HOME&#x2F;$PKG&quot; \</span><br><span class="line">	$DUBBO_PROCOTOL \</span><br><span class="line">	--spring.cloud.nacos.config.server-addr&#x3D;$NACOS_ADDR \</span><br><span class="line">	--spring.cloud.nacos.discovery.server-addr&#x3D;$NACOS_ADDR \</span><br><span class="line">	--spring.profiles.active&#x3D;$PROFILE \</span><br><span class="line">	--spring.cloud.nacos.config.namespace&#x3D;$NACOS_NAMESPACE \</span><br><span class="line">	--spring.cloud.nacos.discovery.namespace&#x3D;$NACOS_NAMESPACE \</span><br><span class="line">	--server.port&#x3D;$SERVER_PORT \</span><br><span class="line">	--seata.service.grouplist&#x3D;$SEATA_ADDR \</span><br><span class="line">	--logging.file&#x3D;logs&#x2F;$PKG_NAME-$SERVER_PORT.log &gt;&#x2F;dev&#x2F;null 2&gt;&amp;1 &amp;</span><br><span class="line">&#125;</span><br><span class="line">#停止应用，注意先判断。</span><br><span class="line">stoppkg() &#123;</span><br><span class="line">	pid_of_app</span><br><span class="line">	if test &quot;$psid&quot; !&#x3D; &quot;0&quot; ; then</span><br><span class="line">		kill $psid</span><br><span class="line">		sleep 1</span><br><span class="line">		if test $? !&#x3D; 0 ; then</span><br><span class="line">			echo &quot;$APP $PKG stop success.&quot;</span><br><span class="line">		else</span><br><span class="line">			pid_of_app</span><br><span class="line">            if test &quot;$psid&quot; !&#x3D; &quot;0&quot; ; then</span><br><span class="line">                stoppkg</span><br><span class="line">            else</span><br><span class="line">                echo &quot;$APP $PKG has stoped.&quot;</span><br><span class="line">            fi</span><br><span class="line">		fi</span><br><span class="line">	else</span><br><span class="line">		echo &quot;$APP $PKG has stoped.&quot;</span><br><span class="line">	fi</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#启动应用，传递了env参数，注意先判断。</span><br><span class="line">startall()&#123;</span><br><span class="line">  if test -d $NOW_VERSION_STORE&#x2F; ;then</span><br><span class="line">    for file2 in &#96;ls -a $NOW_VERSION_STORE&#x2F;| egrep &#39;.jar$&#39;&#96;</span><br><span class="line">    do</span><br><span class="line">      PKG&#x3D;$file2</span><br><span class="line">      startinone</span><br><span class="line">    done</span><br><span class="line">	fi</span><br><span class="line">	rmbackup</span><br><span class="line">&#125;</span><br><span class="line">#关闭全部</span><br><span class="line">stopall() &#123;</span><br><span class="line">	for file2 in &#96;ls -a $APP_HOME&#x2F;| egrep &#39;.jar$&#39;&#96;</span><br><span class="line">	do</span><br><span class="line">		PKG&#x3D;$file2</span><br><span class="line">		stoppkg</span><br><span class="line">	done</span><br><span class="line">&#125;</span><br><span class="line">#版本回滚</span><br><span class="line">rollbackall() &#123;</span><br><span class="line">	for file2 in &#96;ls -a $OLD_VERSION_STORE | egrep &#39;.jar$&#39;&#96;</span><br><span class="line">	do</span><br><span class="line">		PKG&#x3D;$file2</span><br><span class="line">		rollback</span><br><span class="line">		restartpkg</span><br><span class="line">	done</span><br><span class="line">	rmbackup</span><br><span class="line">&#125;</span><br><span class="line">#重启服务</span><br><span class="line">restartpkg()&#123;</span><br><span class="line">	stoppkg</span><br><span class="line">	startpkg</span><br><span class="line">&#125;</span><br><span class="line">#重启全部</span><br><span class="line">restartall()&#123;</span><br><span class="line">	for file2 in &#96;ls -a $APP_HOME&#x2F;| egrep &#39;.jar$&#39;&#96;</span><br><span class="line">	do</span><br><span class="line">		PKG&#x3D;$file2</span><br><span class="line">		stoppkg</span><br><span class="line">    startpkg</span><br><span class="line">	done</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 1：backup 当前版本&#x2F;日期</span><br><span class="line"># 2：stoppkg   停止所有服务</span><br><span class="line"># 3：deploy 部署jar</span><br><span class="line"># 4：startpkg  启动多个实例</span><br><span class="line">startinone()&#123;</span><br><span class="line">	backup</span><br><span class="line">	stoppkg</span><br><span class="line">	deploy</span><br><span class="line">	startpkg</span><br><span class="line">&#125;</span><br><span class="line">help()&#123;</span><br><span class="line"> echo &quot;a(app)e(env)v(version)z(zip)p(pkg)&quot;</span><br><span class="line"> echo &quot;o(port)c(act)i(inc_tot)u(url)&quot;</span><br><span class="line"> echo &quot;重启单个jar         .&#x2F;startall.sh -a mspp-jar -c restartpkg  -p mspp-mzprovider.jar&quot;</span><br><span class="line"> echo &quot;关闭全部            .&#x2F;startall.sh -a mspp-jar -c stopall&quot;</span><br><span class="line"> echo &quot;重启全部            .&#x2F;startall.sh -a mspp-jar -c restartall&quot;</span><br><span class="line"> echo &quot;重新部署全部         .&#x2F;startall.sh -a mspp-jar -c startall    -v 2019081413  &quot;</span><br><span class="line"> echo &quot;重新部署单个jar      .&#x2F;startall.sh -a mspp-jar -c startinone  -v 2019081413  -p mspp-mzprovider.jar&quot;</span><br><span class="line"> echo &quot;回滚                .&#x2F;startall.sh -a mspp-jar -c rollbackall -v 2019081413 &quot;</span><br><span class="line"> echo &quot;启动                .&#x2F;startall.sh -a mspp-jar -c startpkg  -p mspp-mzprovider.jar&quot;</span><br><span class="line"> echo &quot;停止                .&#x2F;startall.sh -a mspp-jar -c stoppkg  -p mspp-mzprovider.jar&quot;</span><br><span class="line"> echo &quot;删除备份                .&#x2F;startall.sh -a mspp-jar -c rmbackup  &quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#根据输入参数，选择执行对应方法，不输入则执行使用说明</span><br><span class="line">case &quot;$ACT&quot; in</span><br><span class="line">#    prepare) prepare;;</span><br><span class="line">#    backup) backup;;</span><br><span class="line">#    deploy) deploy;;</span><br><span class="line">#    deploycfg) deploycfg;;</span><br><span class="line">#    stoppkg) stoppkg;;</span><br><span class="line">     rmbackup) rmbackup;;</span><br><span class="line">     help) help;;</span><br><span class="line">     startpkg) startpkg;;</span><br><span class="line">     stoppkg) stoppkg;;</span><br><span class="line">     stopall) stopall;;</span><br><span class="line">     restartpkg) restartpkg;;</span><br><span class="line">     restartall) restartall;;</span><br><span class="line">     startinone) startinone;;</span><br><span class="line">     startall) startall;;</span><br><span class="line">     rollbackall) rollbackall;;</span><br><span class="line">*)</span><br><span class="line">	echo $&quot;Usage: $0 &#123;8 args&#125;&quot;</span><br><span class="line">	exit 1</span><br><span class="line">;;</span><br><span class="line">esac</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
+<p>端口配置要点</p>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>dubbo端口</th>
+<th>tomcat端口</th>
+<th>依赖模块</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>app-mzprovider</td>
+<td>21100</td>
+<td>23100</td>
+<td></td>
+</tr>
+<tr>
+<td>app-otherprovider</td>
+<td>21200</td>
+<td>23200</td>
+<td></td>
+</tr>
+<tr>
+<td>app-zyprovider</td>
+<td>21300</td>
+<td>23300</td>
+<td></td>
+</tr>
+<tr>
+<td>app-oauthprovider</td>
+<td>21400</td>
+<td>23400</td>
+<td></td>
+</tr>
+<tr>
+<td>app-mzconsumer</td>
+<td>21500</td>
+<td>23500</td>
+<td>app-otherprovider,app-oauthprovider,app-mzprovider</td>
+</tr>
+<tr>
+<td>app-otherconsumer</td>
+<td>21600</td>
+<td>23600</td>
+<td>app-otherprovider,app-oauthprovider</td>
+</tr>
+<tr>
+<td>app-zyconsumer</td>
+<td>21700</td>
+<td>23700</td>
+<td>app-otherprovider,app-oauthprovider,app-zyprovider</td>
+</tr>
+<tr>
+<td>app-gateway</td>
+<td></td>
+<td>9090</td>
+<td></td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>您的关注就是我们最大的成功</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="huangyangcong 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="huangyangcong 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    huangyangcong
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://huangyangcong.github.io/2019/08/09/springboot%E9%83%A8%E7%BD%B2%E5%91%BD%E4%BB%A4/" title="springboot部署命令">https://huangyangcong.github.io/2019/08/09/springboot%E9%83%A8%E7%BD%B2%E5%91%BD%E4%BB%A4/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/09/linux%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95/" rel="next" title="linux命令记录">
+                <i class="fa fa-chevron-left"></i> linux命令记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/12/redis%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" rel="prev" title="redis集群部署">
+                redis集群部署 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head.jpg"
+                alt="huangyangcong" />
+            
+              <p class="site-author-name" itemprop="name">huangyangcong</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+      
+         <div>
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="210" height="110" src="//music.163.com/outchain/player?type=2&id=33911781&auto=1&height=66"></iframe>
+         </div>
+      
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">huangyangcong</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

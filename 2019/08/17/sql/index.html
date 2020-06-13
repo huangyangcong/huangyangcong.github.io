@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans,zh-CN,zh-TW,en,ja,default">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="行列互转拼接sql12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758DROP PROCEDUREIF EXISTS sp_score;DELIMITER &amp;&amp;CREATE PROCEDURE sp_score ()BEG">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sql">
+<meta property="og:url" content="https://huangyangcong.github.io/2019/08/17/sql/index.html">
+<meta property="og:site_name" content="huangyangcong">
+<meta property="og:description" content="行列互转拼接sql12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758DROP PROCEDUREIF EXISTS sp_score;DELIMITER &amp;&amp;CREATE PROCEDURE sp_score ()BEG">
+<meta property="article:published_time" content="2019-08-17T07:05:34.000Z">
+<meta property="article:modified_time" content="2020-06-12T15:20:53.531Z">
+<meta property="article:author" content="huangyangcong">
+<meta property="article:tag" content="博客">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://huangyangcong.github.io/2019/08/17/sql/"/>
+
+
+
+
+
+  <title>sql | huangyangcong</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">huangyangcong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">独立开发</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://huangyangcong.github.io/2019/08/17/sql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="huangyangcong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="huangyangcong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">sql</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-17T15:05:34+08:00">
+                2019-08-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="行列互转"><a href="#行列互转" class="headerlink" title="行列互转"></a>行列互转</h3><h1 id="拼接sql"><a href="#拼接sql" class="headerlink" title="拼接sql"></a>拼接sql</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">DROP PROCEDURE</span><br><span class="line">IF EXISTS sp_score;</span><br><span class="line">DELIMITER &amp;&amp;</span><br><span class="line"></span><br><span class="line">CREATE PROCEDURE sp_score ()</span><br><span class="line">BEGIN</span><br><span class="line">	#课程名称</span><br><span class="line">	DECLARE</span><br><span class="line">		cname_n VARCHAR (20) ; #所有课程数量</span><br><span class="line">		DECLARE</span><br><span class="line">			count INT ; #计数器</span><br><span class="line">			DECLARE</span><br><span class="line">				i INT DEFAULT 0 ; #拼接SQL字符串</span><br><span class="line">			SET @s &#x3D; &#39;SELECT sname&#39; ;</span><br><span class="line">			SET count &#x3D; (</span><br><span class="line">				SELECT</span><br><span class="line">					COUNT(DISTINCT cname)</span><br><span class="line">				FROM</span><br><span class="line">					stdscore</span><br><span class="line">			) ;</span><br><span class="line">			WHILE i &lt; count DO</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">			SET cname_n &#x3D; (</span><br><span class="line">				SELECT</span><br><span class="line">					cname</span><br><span class="line">				FROM</span><br><span class="line">					stdscore</span><br><span class="line">				GROUP BY CNAME </span><br><span class="line">				LIMIT i,</span><br><span class="line">				1</span><br><span class="line">			) ;</span><br><span class="line">			SET @s &#x3D; CONCAT(</span><br><span class="line">				@s,</span><br><span class="line">				&#39;, SUM(CASE cname WHEN &#39;,</span><br><span class="line">				&#39;\&#39;&#39;,</span><br><span class="line">				cname_n,</span><br><span class="line">				&#39;\&#39;&#39;,</span><br><span class="line">				&#39; THEN score ELSE 0 END)&#39;,</span><br><span class="line">				&#39; AS &#39;,</span><br><span class="line">				&#39;\&#39;&#39;,</span><br><span class="line">				cname_n,</span><br><span class="line">				&#39;\&#39;&#39;</span><br><span class="line">			) ;</span><br><span class="line">			SET i &#x3D; i + 1 ;</span><br><span class="line">			END</span><br><span class="line">			WHILE ;</span><br><span class="line">			SET @s &#x3D; CONCAT(</span><br><span class="line">				@s,</span><br><span class="line">				&#39; FROM stdscore GROUP BY sname&#39;</span><br><span class="line">			) ; #用于调试</span><br><span class="line">			#SELECT @s;</span><br><span class="line">			PREPARE stmt</span><br><span class="line">			FROM</span><br><span class="line">				@s ; EXECUTE stmt ;</span><br><span class="line">			END&amp;&amp;</span><br><span class="line"></span><br><span class="line">CALL sp_score () ;</span><br></pre></td></tr></table></figure>
+
+<h1 id="动态行转列"><a href="#动态行转列" class="headerlink" title="动态行转列"></a>动态行转列</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SET @EE&#x3D;&#39;&#39;;</span><br><span class="line">SELECT @EE:&#x3D;GROUP_CONCAT(@EE,&#39;sum(if(val&#x3D;\&#39;&#39;,val,&#39;\&#39;&#39;,&#39;,id,0)) as &#39;,&#39;&#39;&#39;&#39;,val,&#39;&#39;&#39;&#39;) from (select DISTINCT val from hl_test)a;</span><br><span class="line">SET @str&#x3D;CONCAT(&#39;select &#39;,@EE,&#39; from hl_test group by id&#39;);</span><br><span class="line">PREPARE stmt from @str;</span><br><span class="line">EXECUTE stmt;</span><br></pre></td></tr></table></figure>
+
+<h1 id="动态列转行"><a href="#动态列转行" class="headerlink" title="动态列转行"></a>动态列转行</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SET @EE&#x3D;&#39;&#39;;</span><br><span class="line">set @str_tmp&#x3D;&#39;&#39;;</span><br><span class="line">SELECT @EE:&#x3D;CONCAT(@EE,&#39;GROUP_CONCAT(IF(type&#x3D;\&#39;&#39;,type,&#39;\&#39;&#39;,&#39;,value,null)) AS &#39;,type,&#39;,&#39;) as aa into @str_tmp FROM (SELECT DISTINCT type FROM product_category) A order by length(aa) desc limit 1; </span><br><span class="line">SET @QQ&#x3D;CONCAT(&#39;SELECT product_category.product_id,&#39;,LEFT(@str_tmp,char_length(@str_tmp)-1),&#39;   FROM product_category GROUP BY product_id&#39;);</span><br><span class="line">PREPARE stmt FROM @QQ; </span><br><span class="line">EXECUTE stmt;</span><br><span class="line">deallocate prepare stmt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="行转列"><a href="#行转列" class="headerlink" title="行转列"></a>行转列</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT user_name ,</span><br><span class="line">    MAX(CASE course WHEN &#39;数学&#39; THEN score ELSE 0 END ) 数学,</span><br><span class="line">    MAX(CASE course WHEN &#39;语文&#39; THEN score ELSE 0 END ) 语文,</span><br><span class="line">    MAX(CASE course WHEN &#39;英语&#39; THEN score ELSE 0 END ) 英语</span><br><span class="line">FROM test_tb_grade</span><br><span class="line">GROUP BY USER_NAME;</span><br></pre></td></tr></table></figure>
+
+<h1 id="列转行SQL："><a href="#列转行SQL：" class="headerlink" title="列转行SQL："></a>列转行SQL：</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select user_name, &#39;语文&#39; COURSE , CN_SCORE as SCORE from test_tb_grade2</span><br><span class="line">union select user_name, &#39;数学&#39; COURSE, MATH_SCORE as SCORE from test_tb_grade2</span><br><span class="line">union select user_name, &#39;英语&#39; COURSE, EN_SCORE as SCORE from test_tb_grade2</span><br><span class="line">order by user_name,COURSE;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">学生表</span><br><span class="line">就简单一点，学生学号、学生姓名两个字段</span><br><span class="line"></span><br><span class="line">CREATE TABLE &#96;student&#96; (</span><br><span class="line">  &#96;stuid&#96; VARCHAR(16) NOT NULL COMMENT &#39;学号&#39;,</span><br><span class="line">  &#96;stunm&#96; VARCHAR(20) NOT NULL COMMENT &#39;学生姓名&#39;,</span><br><span class="line">  PRIMARY KEY (&#96;stuid&#96;)</span><br><span class="line">)</span><br><span class="line">COLLATE&#x3D;&#39;utf8_general_ci&#39;</span><br><span class="line">ENGINE&#x3D;InnoDB;</span><br><span class="line">课程表</span><br><span class="line">课程编号、课程名</span><br><span class="line"></span><br><span class="line">CREATE TABLE &#96;courses&#96; (</span><br><span class="line">  &#96;courseno&#96; VARCHAR(20) NOT NULL,</span><br><span class="line">  &#96;coursenm&#96; VARCHAR(100) NOT NULL,</span><br><span class="line">  PRIMARY KEY (&#96;courseno&#96;)</span><br><span class="line">)</span><br><span class="line">COMMENT&#x3D;&#39;课程表&#39;</span><br><span class="line">COLLATE&#x3D;&#39;utf8_general_ci&#39;</span><br><span class="line">ENGINE&#x3D;InnoDB;</span><br><span class="line">成绩表</span><br><span class="line">学生学号、课程号、成绩</span><br><span class="line"></span><br><span class="line">CREATE TABLE &#96;score&#96; (</span><br><span class="line">  &#96;stuid&#96; VARCHAR(16) NOT NULL,</span><br><span class="line">  &#96;courseno&#96; VARCHAR(20) NOT NULL,</span><br><span class="line">  &#96;scores&#96; FLOAT NULL DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (&#96;stuid&#96;, &#96;courseno&#96;)</span><br><span class="line">)</span><br><span class="line">COLLATE&#x3D;&#39;utf8_general_ci&#39;</span><br><span class="line">ENGINE&#x3D;InnoDB;</span><br><span class="line">以上就是数据库表的结构了，这里没有建立外键，但是根据表的结构，可以清楚的看到成绩表中的学号和课程号是与学生表、课程表分别关联起来的。</span><br><span class="line"></span><br><span class="line">数据准备</span><br><span class="line"></span><br><span class="line">&#x2F;*学生表数据*&#x2F;</span><br><span class="line">Insert Into student (stuid, stunm) Values(&#39;1001&#39;, &#39;张三&#39;);</span><br><span class="line">Insert Into student (stuid, stunm) Values(&#39;1002&#39;, &#39;李四&#39;);</span><br><span class="line">Insert Into student (stuid, stunm) Values(&#39;1003&#39;, &#39;赵二&#39;);</span><br><span class="line">Insert Into student (stuid, stunm) Values(&#39;1004&#39;, &#39;王五&#39;);</span><br><span class="line">Insert Into student (stuid, stunm) Values(&#39;1005&#39;, &#39;刘青&#39;);</span><br><span class="line">Insert Into student (stuid, stunm) Values(&#39;1006&#39;, &#39;周明&#39;);</span><br><span class="line">&#x2F;*课程表数据*&#x2F;</span><br><span class="line">Insert Into courses (courseno, coursenm) Values(&#39;C001&#39;, &#39;大学语文&#39;);</span><br><span class="line">Insert Into courses (courseno, coursenm) Values(&#39;C002&#39;, &#39;新视野英语&#39;);</span><br><span class="line">Insert Into courses (courseno, coursenm) Values(&#39;C003&#39;, &#39;离散数学&#39;);</span><br><span class="line">Insert Into courses (courseno, coursenm) Values(&#39;C004&#39;, &#39;概率论与数理统计&#39;);</span><br><span class="line">Insert Into courses (courseno, coursenm) Values(&#39;C005&#39;, &#39;线性代数&#39;);</span><br><span class="line">Insert Into courses (courseno, coursenm) Values(&#39;C006&#39;, &#39;高等数学(一)&#39;);</span><br><span class="line">Insert Into courses (courseno, coursenm) Values(&#39;C007&#39;, &#39;高等数学(二)&#39;);</span><br><span class="line">&#x2F;*成绩表数据*&#x2F;</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1001&#39;, &#39;C001&#39;, 67);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1002&#39;, &#39;C001&#39;, 68);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1003&#39;, &#39;C001&#39;, 69);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1004&#39;, &#39;C001&#39;, 70);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1005&#39;, &#39;C001&#39;, 71);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1006&#39;, &#39;C001&#39;, 72);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1001&#39;, &#39;C002&#39;, 87);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1002&#39;, &#39;C002&#39;, 88);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1003&#39;, &#39;C002&#39;, 89);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1004&#39;, &#39;C002&#39;, 90);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1005&#39;, &#39;C002&#39;, 91);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1006&#39;, &#39;C002&#39;, 92);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1001&#39;, &#39;C003&#39;, 83);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1002&#39;, &#39;C003&#39;, 84);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1003&#39;, &#39;C003&#39;, 85);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1004&#39;, &#39;C003&#39;, 86);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1005&#39;, &#39;C003&#39;, 87);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1006&#39;, &#39;C003&#39;, 88);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1001&#39;, &#39;C004&#39;, 88);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1002&#39;, &#39;C004&#39;, 89);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1003&#39;, &#39;C004&#39;, 90);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1004&#39;, &#39;C004&#39;, 91);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1005&#39;, &#39;C004&#39;, 92);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1006&#39;, &#39;C004&#39;, 93);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1001&#39;, &#39;C005&#39;, 77);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1002&#39;, &#39;C005&#39;, 78);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1003&#39;, &#39;C005&#39;, 79);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1004&#39;, &#39;C005&#39;, 80);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1005&#39;, &#39;C005&#39;, 81);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1006&#39;, &#39;C005&#39;, 82);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1001&#39;, &#39;C006&#39;, 77);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1002&#39;, &#39;C006&#39;, 78);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1003&#39;, &#39;C006&#39;, 79);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1004&#39;, &#39;C006&#39;, 80);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1005&#39;, &#39;C006&#39;, 81);</span><br><span class="line">Insert Into score(stuid, courseno, scores) Values(&#39;1006&#39;, &#39;C006&#39;, 82);</span><br></pre></td></tr></table></figure>
+
+<h1 id="动态拼接行转列"><a href="#动态拼接行转列" class="headerlink" title="动态拼接行转列"></a>动态拼接行转列</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">SET @sql &#x3D; NULL;</span><br><span class="line">SELECT</span><br><span class="line"> GROUP_CONCAT(DISTINCT</span><br><span class="line">  CONCAT(</span><br><span class="line">   &#39;MAX(IF(c.coursenm &#x3D; &#39;&#39;&#39;,</span><br><span class="line">   c.coursenm,</span><br><span class="line">   &#39;&#39;&#39;, s.scores, 0)) AS &#39;&#39;&#39;,</span><br><span class="line">   c.coursenm, &#39;&#39;&#39;&#39;</span><br><span class="line">  )</span><br><span class="line"> ) INTO @sql</span><br><span class="line">FROM courses c;</span><br><span class="line"></span><br><span class="line">SET @sql &#x3D; CONCAT(&#39;Select st.stuid, st.stunm, &#39;, @sql, </span><br><span class="line">            &#39; From Student st </span><br><span class="line">            Left Join score s On st.stuid &#x3D; s.stuid</span><br><span class="line">            Left Join courses c On c.courseno &#x3D; s.courseno</span><br><span class="line">            Group by st.stuid&#39;);</span><br><span class="line">PREPARE stmt FROM @sql;</span><br><span class="line">EXECUTE stmt;</span><br><span class="line">DEALLOCATE PREPARE stmt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">declare @sqlc1 nvarchar(1000)</span><br><span class="line">declare @sqlc2 nvarchar(1000)</span><br><span class="line">declare @sqlc3 nvarchar(1000)</span><br><span class="line">declare @sqls1 nvarchar(2000)</span><br><span class="line">declare @sqls2 nvarchar(2000)</span><br><span class="line">declare @sql nvarchar(4000)</span><br><span class="line">SET @sqlc1&#x3D;STUFF((SELECT N&#39;,&#39;+QUOTENAME(b.[Subject]) </span><br><span class="line"> FROM (select  distinct [Subject] from tb) as b</span><br><span class="line">   FOR XML PATH(&#39;&#39;)),1,1,N&#39;&#39;);</span><br><span class="line">SET @sqlc2&#x3D;STUFF((SELECT N&#39;, t1.&#39; + QUOTENAME(b.[Subject]) </span><br><span class="line">    + &#39;, t2.&#39; + QUOTENAME(b.[Subject]) + &#39; as &#39; + QUOTENAME(b.[Subject] + &#39;参考&#39;)</span><br><span class="line">+ &#39;, (t1.&#39; + QUOTENAME(b.[Subject]) + &#39; - t2.&#39;+QUOTENAME(b.[Subject]) </span><br><span class="line">+ &#39;) as &#39; +  QUOTENAME(b.[Subject] + &#39;差异&#39;)  </span><br><span class="line"> FROM (select  distinct [Subject] from tb) as b</span><br><span class="line">   FOR XML PATH(&#39;&#39;)),1,1,N&#39;&#39;);</span><br><span class="line">SET @sqlc3&#x3D;STUFF((SELECT N&#39;, sum(t1.&#39; + QUOTENAME(b.[Subject]) </span><br><span class="line">    + &#39;), sum(t2.&#39; + QUOTENAME(b.[Subject])</span><br><span class="line">+ &#39;), sum(t1.&#39; + QUOTENAME(b.[Subject]) + &#39; - t2.&#39;+QUOTENAME(b.[Subject]) + &#39;)&#39;  </span><br><span class="line"> FROM (select  distinct [Subject] from tb) as b</span><br><span class="line">   FOR XML PATH(&#39;&#39;)),1,1,N&#39;&#39;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SET @sqls1 &#x3D; &#39;</span><br><span class="line">select </span><br><span class="line">  ROW_NUMBER() OVER(order by t1.[name]) as [NO], t1.[name], &#39; + @sqlc2 +</span><br><span class="line">&#39; from</span><br><span class="line">(</span><br><span class="line">select [name],&#39; + @sqlc1 +</span><br><span class="line">&#39; from (select [name], [result], [subject] from tb ) tb</span><br><span class="line">PIVOT </span><br><span class="line">(   </span><br><span class="line">    avg(result)  </span><br><span class="line">    FOR [subject] IN</span><br><span class="line">    (&#39; + @sqlc1 + &#39;)  </span><br><span class="line">) AS T1 </span><br><span class="line">) as t1</span><br><span class="line">left join </span><br><span class="line">(</span><br><span class="line">select [name], &#39;+ @sqlc1 +</span><br><span class="line">&#39; from (select [name], [RefResult], [subject] from tb ) tb</span><br><span class="line">PIVOT </span><br><span class="line">(   </span><br><span class="line">    avg(RefResult)  </span><br><span class="line">    FOR [subject] IN</span><br><span class="line">    ( &#39;+ @sqlc1 + &#39;)  </span><br><span class="line">) AS T2 </span><br><span class="line">) as T2 </span><br><span class="line">on T1.name &#x3D; T2.name&#39;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SET @sqls2 &#x3D; &#39;</span><br><span class="line">select </span><br><span class="line">  &#39;&#39;&#39;&#39;, &#39;&#39;合计&#39;&#39;, &#39; + @sqlc3 + </span><br><span class="line">&#39; from</span><br><span class="line">(</span><br><span class="line">select [name],&#39; + @sqlc1 +</span><br><span class="line">&#39; from (select [name], [result], [subject] from tb ) tb</span><br><span class="line">PIVOT </span><br><span class="line">(   </span><br><span class="line">    avg(result)  </span><br><span class="line">    FOR [subject] IN</span><br><span class="line">    (&#39; + @sqlc1 + &#39;)  </span><br><span class="line">) AS T1 </span><br><span class="line">) as t1</span><br><span class="line">left join </span><br><span class="line">(</span><br><span class="line">select [name], &#39;+ @sqlc1 +</span><br><span class="line">&#39; from (select [name], [RefResult], [subject] from tb ) tb</span><br><span class="line">PIVOT </span><br><span class="line">(   </span><br><span class="line">    avg(RefResult)  </span><br><span class="line">    FOR [subject] IN</span><br><span class="line">    ( &#39;+ @sqlc1 + &#39;)  </span><br><span class="line">) AS T2 </span><br><span class="line">) as T2 </span><br><span class="line">on T1.name &#x3D; T2.name&#39;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">set @sql &#x3D; @sqls1 + &#39; union all &#39; + @sqls2</span><br><span class="line">exec(@sql)</span><br></pre></td></tr></table></figure>
+<h4 id="特殊sql"><a href="#特殊sql" class="headerlink" title="特殊sql"></a>特殊sql</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line">       member_id,</span><br><span class="line">       sum(case when member_type &#x3D; 1 then 1 else 0 end) as consignor,</span><br><span class="line">       sum(case when member_type &#x3D; 2 then 1 else 0 end) as tran,</span><br><span class="line">       sum(case when member_type &#x3D; 1 then amount else 0 end) as consignorAmount,</span><br><span class="line">       sum(case when member_type &#x3D; 2 then amount else 0 end) as tranAmount,</span><br><span class="line">       GROUP_CONCAT(case when member_type &#x3D; 1 then id else  end) as consignorfeeChekenIds,</span><br><span class="line">       GROUP_CONCAT(case when member_type &#x3D; 2 then id else 0 end) as tranfeeChekenId,</span><br><span class="line">       from bus_fee_checken</span><br><span class="line">       where is_delete &#x3D; 0</span><br><span class="line">       and status &#x3D; 1 and start_dt &lt;![CDATA[&gt;&#x3D;]]&gt; #&#123;now&#125;</span><br><span class="line">       group by member_id</span><br></pre></td></tr></table></figure>
+<h4 id="oracle查看锁表"><a href="#oracle查看锁表" class="headerlink" title="oracle查看锁表"></a>oracle查看锁表</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">select sess.sid, </span><br><span class="line">sess.serial#, </span><br><span class="line">lo.oracle_username, </span><br><span class="line">lo.os_user_name, </span><br><span class="line">ao.object_name, </span><br><span class="line">lo.locked_mode </span><br><span class="line">from v$locked_object lo, </span><br><span class="line">dba_objects ao, </span><br><span class="line">v$session sess </span><br><span class="line">where ao.object_id &#x3D; lo.object_id and lo.session_id &#x3D; sess.sid</span><br></pre></td></tr></table></figure>
+
+<h4 id="oracle执行计划"><a href="#oracle执行计划" class="headerlink" title="oracle执行计划"></a>oracle执行计划</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">explain plan for sql</span><br><span class="line">SELECT plan_table_output FROM TABLE(DBMS_XPLAN.DISPLAY(&#39;PLAN_TABLE&#39;));</span><br></pre></td></tr></table></figure>
+
+<h4 id="oracle分组最新一条数据"><a href="#oracle分组最新一条数据" class="headerlink" title="oracle分组最新一条数据"></a>oracle分组最新一条数据</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">select * from (</span><br><span class="line">select msgdata.aae075, tb20.baz177,tb20.BAZ178, row_number() over(partition by tb20.BAZ178 order by msg.AAE036 desc) rn from tb20</span><br><span class="line">                 left join  SIPI_MSG msg on msg.BAZ178&#x3D;tb20.BAZ178  </span><br><span class="line">                 left join SIPI_MSGDATA msgdata  </span><br><span class="line">                 on msg.bae001 &#x3D; msgdata.bae001  </span><br><span class="line">                 where tb20.aae036 between to_date(&#39;20191016000000&#39;,&#39;YYYYMMDDHH24MISS&#39;) AND to_date(&#39;20191019235959&#39;,&#39;YYYYMMDDHH24MISS&#39;) and  tb20.BAZ187&#x3D;&#39;FAIL&#39;) where rn &#x3D;1</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>您的关注就是我们最大的成功</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="huangyangcong 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="huangyangcong 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    huangyangcong
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://huangyangcong.github.io/2019/08/17/sql/" title="sql">https://huangyangcong.github.io/2019/08/17/sql/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/17/docker/" rel="next" title="docker">
+                <i class="fa fa-chevron-left"></i> docker
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/17/minikube/" rel="prev" title="minikube">
+                minikube <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head.jpg"
+                alt="huangyangcong" />
+            
+              <p class="site-author-name" itemprop="name">huangyangcong</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#行列互转"><span class="nav-number">1.</span> <span class="nav-text">行列互转</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拼接sql"><span class="nav-number"></span> <span class="nav-text">拼接sql</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#动态行转列"><span class="nav-number"></span> <span class="nav-text">动态行转列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#动态列转行"><span class="nav-number"></span> <span class="nav-text">动态列转行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#行转列"><span class="nav-number"></span> <span class="nav-text">行转列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#列转行SQL："><span class="nav-number"></span> <span class="nav-text">列转行SQL：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#动态拼接行转列"><span class="nav-number"></span> <span class="nav-text">动态拼接行转列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#特殊sql"><span class="nav-number">0.1.</span> <span class="nav-text">特殊sql</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#oracle查看锁表"><span class="nav-number">0.2.</span> <span class="nav-text">oracle查看锁表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#oracle执行计划"><span class="nav-number">0.3.</span> <span class="nav-text">oracle执行计划</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#oracle分组最新一条数据"><span class="nav-number">0.4.</span> <span class="nav-text">oracle分组最新一条数据</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+      
+         <div>
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="210" height="110" src="//music.163.com/outchain/player?type=2&id=33911781&auto=1&height=66"></iframe>
+         </div>
+      
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">huangyangcong</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

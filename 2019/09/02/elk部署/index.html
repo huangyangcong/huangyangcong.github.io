@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans,zh-CN,zh-TW,en,ja,default">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Logstash[https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_22211217&#x2F;article&#x2F;details&#x2F;80764568][https:&#x2F;&#x2F;github.com&#x2F;elastic&#x2F;logstash&#x2F;blob&#x2F;v1.4.2&#x2F;patterns&#x2F;grok-patterns][https:&#x2F;&#x2F;github.com&#x2F;logstash-plugins&#x2F;logstash-patterns-core&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="elk部署">
+<meta property="og:url" content="https://huangyangcong.github.io/2019/09/02/elk%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="huangyangcong">
+<meta property="og:description" content="Logstash[https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_22211217&#x2F;article&#x2F;details&#x2F;80764568][https:&#x2F;&#x2F;github.com&#x2F;elastic&#x2F;logstash&#x2F;blob&#x2F;v1.4.2&#x2F;patterns&#x2F;grok-patterns][https:&#x2F;&#x2F;github.com&#x2F;logstash-plugins&#x2F;logstash-patterns-core&#x2F;">
+<meta property="article:published_time" content="2019-09-02T09:20:20.000Z">
+<meta property="article:modified_time" content="2020-06-12T15:20:53.518Z">
+<meta property="article:author" content="huangyangcong">
+<meta property="article:tag" content="博客">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://huangyangcong.github.io/2019/09/02/elk部署/"/>
+
+
+
+
+
+  <title>elk部署 | huangyangcong</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">huangyangcong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">独立开发</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://huangyangcong.github.io/2019/09/02/elk%E9%83%A8%E7%BD%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="huangyangcong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="huangyangcong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">elk部署</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-02T17:20:20+08:00">
+                2019-09-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Logstash"><a href="#Logstash" class="headerlink" title="Logstash"></a>Logstash</h2><p>[<a href="https://blog.csdn.net/qq_22211217/article/details/80764568]" target="_blank" rel="noopener">https://blog.csdn.net/qq_22211217/article/details/80764568]</a><br>[<a href="https://github.com/elastic/logstash/blob/v1.4.2/patterns/grok-patterns]" target="_blank" rel="noopener">https://github.com/elastic/logstash/blob/v1.4.2/patterns/grok-patterns]</a><br>[<a href="https://github.com/logstash-plugins/logstash-patterns-core/tree/master/patterns]" target="_blank" rel="noopener">https://github.com/logstash-plugins/logstash-patterns-core/tree/master/patterns]</a></p>
+<ul>
+<li>解压文件<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf logstash-7.3.1.tar.gz</span><br><span class="line">mv $PWD&#x2F;logstash-7.3.1 &#x2F;usr&#x2F;local&#x2F;logstash</span><br><span class="line">cd &#x2F;usr&#x2F;local&#x2F;logstash&#x2F;</span><br></pre></td></tr></table></figure></li>
+<li>安装插件<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">获取列表</span><br><span class="line">bin&#x2F;logstash-plugin list</span><br><span class="line"></span><br><span class="line">bin&#x2F;logstash-plugin install logstash-filter-grok</span><br><span class="line">bin&#x2F;logstash-plugin install logstash-filter-date_formatter</span><br><span class="line">bin&#x2F;logstash-plugin install logstash-filter-date</span><br></pre></td></tr></table></figure></li>
+<li>修改配置<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">  beats &#123;</span><br><span class="line">    port &#x3D;&gt; 5044</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">input &#123;</span><br><span class="line">  beats &#123;</span><br><span class="line">    port &#x3D;&gt; 5044</span><br><span class="line">  &#125;</span><br><span class="line">  file &#123;</span><br><span class="line">        path &#x3D;&gt; [&quot;D:&#x2F;logs&#x2F;*.log&quot;]</span><br><span class="line">        start_position &#x3D;&gt; &quot;beginning&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">filter &#123;</span><br><span class="line">	grok&#123;</span><br><span class="line">	   match &#x3D;&gt; &#123;</span><br><span class="line">			&quot;message&quot; &#x3D;&gt; &quot;\[%&#123;GREEDYDATA:traceid&#125;\]%&#123;SPACE&#125;%&#123;DATA:request_dt&#125;%&#123;SPACE&#125;%&#123;LOGLEVEL:level&#125;%&#123;SPACE&#125;%&#123;NUMBER:pid&#125;%&#123;SPACE&#125;---%&#123;SPACE&#125;\[%&#123;NOTSPACE:thread&#125;\]%&#123;SPACE&#125;%&#123;DATA:class&#125;%&#123;SPACE&#125;:%&#123;SPACE&#125;%&#123;GREEDYDATA:msg&#125;&quot;</span><br><span class="line">			&#125;</span><br><span class="line">	&#125;</span><br><span class="line">        ##对字符串转日期</span><br><span class="line">        date &#123;</span><br><span class="line">            match &#x3D;&gt; [ &quot;request_dt&quot;, &quot;yyyy-MM-dd HH:mm:ss.SSS&quot;]</span><br><span class="line">			target &#x3D;&gt; &quot;request_dt&quot;</span><br><span class="line">			timezone &#x3D;&gt; &quot;+0800&quot;</span><br><span class="line">        &#125;</span><br><span class="line">        ##添加时间元数据</span><br><span class="line">        date_formatter &#123;</span><br><span class="line">          source &#x3D;&gt; &quot;request_dt&quot;</span><br><span class="line">          target &#x3D;&gt; &quot;[@metadata][index_dt]&quot;</span><br><span class="line">          pattern &#x3D;&gt; &quot;yyyy-MM-dd&quot;</span><br><span class="line">          timezone &#x3D;&gt; &quot;Asia&#x2F;Shanghai&quot;</span><br><span class="line">        &#125;</span><br><span class="line">        ###日期格式化</span><br><span class="line">		date_formatter &#123;</span><br><span class="line">          source &#x3D;&gt; &quot;request_dt&quot;</span><br><span class="line">          target &#x3D;&gt; &quot;request_dt&quot;</span><br><span class="line">          pattern &#x3D;&gt; &quot;yyyy-MM-dd HH:mm:ss.SSSZ&quot;</span><br><span class="line">          timezone &#x3D;&gt; &quot;Asia&#x2F;Shanghai&quot;</span><br><span class="line">        &#125;</span><br><span class="line">		 date_formatter &#123;</span><br><span class="line">          source &#x3D;&gt; &quot;@timestamp&quot;</span><br><span class="line">          target &#x3D;&gt; &quot;receive_dt&quot;</span><br><span class="line">		  pattern &#x3D;&gt; &quot;yyyy-MM-dd HH:mm:ss.SSSZ&quot;</span><br><span class="line">          timezone &#x3D;&gt; &quot;Asia&#x2F;Shanghai&quot;</span><br><span class="line">        &#125;</span><br><span class="line">		mutate &#123;</span><br><span class="line">                remove_field &#x3D;&gt; &quot;host&quot;</span><br><span class="line">                remove_field &#x3D;&gt; &quot;@timestamp&quot;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line">output &#123;</span><br><span class="line">	stdout&#123;</span><br><span class="line">        codec&#x3D;&gt;rubydebug</span><br><span class="line">    &#125;</span><br><span class="line">elasticsearch &#123;</span><br><span class="line">  hosts &#x3D;&gt; [&quot;http:&#x2F;&#x2F;192.168.10.133:9200&quot;]</span><br><span class="line">  index &#x3D;&gt; &quot;mspp-%&#123;[@metadata][index_dt]&#125;&quot;</span><br><span class="line">  user &#x3D;&gt; &quot;elastic&quot;</span><br><span class="line">  password &#x3D;&gt; &quot;mspp@123456&quot;</span><br><span class="line">&#125;</span><br><span class="line">#	if [level] &#x3D;&#x3D; &quot;ERROR&quot; &#123;</span><br><span class="line">#       elasticsearch &#123;</span><br><span class="line">#          #action &#x3D;&gt; &quot;index&quot;</span><br><span class="line">#          hosts &#x3D;&gt; [&quot;http:&#x2F;&#x2F;192.168.10.133:9200&quot;]</span><br><span class="line">#           index &#x3D;&gt; &quot;mspp-error-%&#123;[@metadata][index_dt]&#125;&quot;</span><br><span class="line">#          user &#x3D;&gt; &quot;elastic&quot;</span><br><span class="line">#          password &#x3D;&gt; &quot;mspp@123456&quot;</span><br><span class="line">#    &#125;</span><br><span class="line">#&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>创建用户<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">useradd logstash</span><br><span class="line">chown -R logstash:logstash &#x2F;usr&#x2F;local&#x2F;logstash&#x2F;</span><br></pre></td></tr></table></figure></li>
+<li>启动<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">su – logstash</span><br><span class="line">nohup bin&#x2F;logstash -f config&#x2F;mspp.conf &amp;</span><br></pre></td></tr></table></figure></li>
+<li>开放端口<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;sysconfig&#x2F;iptables  打开配置文件加入如下语句:</span><br><span class="line">-A INPUT -p tcp -m state --state NEW -m tcp --dport 5044 -j DROP   </span><br><span class="line">重启防火墙</span><br><span class="line">service iptables restart</span><br></pre></td></tr></table></figure></li>
+<li>date插件<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[2018-07-04 17:43:35,503]</span><br><span class="line">grok&#123;</span><br><span class="line">      match &#x3D;&gt; &#123;&quot;message&quot;&#x3D;&gt;&quot;%&#123;DATA:raw_datetime&#125;&quot;&#125;</span><br><span class="line">&#125;</span><br><span class="line">date&#123;</span><br><span class="line">       match &#x3D;&gt; [&quot;raw_datetime&quot;,&quot;YYYY-MM-dd HH:mm:ss,SSS&quot;]</span><br><span class="line">        remove_field &#x3D;&gt;[&quot;raw_datetime&quot;]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#将raw_datetime存到@timestamp 然后删除raw_datetime</span><br><span class="line"></span><br><span class="line">#24&#x2F;Jul&#x2F;2018:18:15:05 +0800</span><br><span class="line">date &#123;</span><br><span class="line">      match &#x3D;&gt; [&quot;timestamp&quot;,&quot;dd&#x2F;MMM&#x2F;YYYY:HH:mm:ss Z]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#1565931281</span><br><span class="line">    date&#123;</span><br><span class="line">        match &#x3D;&gt; [&quot;sql_timestamp&quot;,&quot;UNIX&quot;]</span><br><span class="line">        locale &#x3D;&gt; &quot;en&quot;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="metadata-foo"><a href="#metadata-foo" class="headerlink" title="[@metadata][foo]"></a>[@metadata][foo]</h4></li>
+<li>提供了一种简单、方便的方式来保存中间数据。这样一方面减少了logstash配置文件的复杂性：避免调用remove_field，另一方面也减少了输出中的一些不必要的数据<h2 id="filebeat"><a href="#filebeat" class="headerlink" title="filebeat"></a>filebeat</h2></li>
+<li>解压文件<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf filebeat-7.3.1-linux-x86_64.tar.gz</span><br><span class="line">cd &#x2F;usr&#x2F;local&#x2F;filebeat&#x2F;</span><br><span class="line">cd &#x2F;usr&#x2F;local&#x2F;filebeat&#x2F;</span><br></pre></td></tr></table></figure></li>
+<li>修改配置<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">filebeat.inputs:</span><br><span class="line">- type: log</span><br><span class="line">  enabled: true</span><br><span class="line">  paths:</span><br><span class="line">#配置log路径</span><br><span class="line">    - &#x2F;usr&#x2F;local&#x2F;app&#x2F;mspp-jar&#x2F;logs&#x2F;*.log</span><br><span class="line">	 #多行匹配</span><br><span class="line">  #multiline.pattern: ^[0-9]&#123;4&#125;-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30))) ([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]).[0-9]&#123;3&#125;</span><br><span class="line">  multiline.pattern: ^\[</span><br><span class="line">  multiline.negate: true</span><br><span class="line">  multiline.match: after</span><br><span class="line">setup.kibana:</span><br><span class="line">  hosts: [&quot;xxx.xxx.xxx.xxx:5601&quot;]</span><br><span class="line">output.logstash:</span><br><span class="line">  	  hosts: [&quot;xxx.xxx.xxx.xxx:5044&quot;]</span><br></pre></td></tr></table></figure></li>
+<li>创建用户<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">useradd filebeat</span><br><span class="line">chown -R filebeat: filebeat &#x2F;usr&#x2F;local&#x2F;filebeat&#x2F;</span><br></pre></td></tr></table></figure></li>
+<li>启动服务<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">su – filebeat</span><br><span class="line">nohup .&#x2F;filebeat -e -c filebeat.yml -d publish &amp;</span><br></pre></td></tr></table></figure></li>
+<li>多行匹配<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># The regexp Pattern that has to be matched. The example pattern matches all lines starting with [</span><br><span class="line">&#x2F;&#x2F;空行</span><br><span class="line"> multiline.pattern: ^\s+ </span><br><span class="line"></span><br><span class="line"> # Defines if the pattern set under pattern should be negated or not. Default is false.</span><br><span class="line"> multiline.negate: false</span><br><span class="line"></span><br><span class="line"> # Match can be set to &quot;after&quot; or &quot;before&quot;. It is used to define if lines should be append to a pattern</span><br><span class="line"> # that was (not) matched before or after or as long as a pattern is not matched based on negate.</span><br><span class="line"> # Note: After is the equivalent to previous and before is the equivalent to to next in Logstash</span><br><span class="line"> multiline.match: after</span><br></pre></td></tr></table></figure></li>
+<li>配置</li>
+<li>启动<h2 id="elasticsearch"><a href="#elasticsearch" class="headerlink" title="elasticsearch"></a>elasticsearch</h2></li>
+<li>查看系统环境：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@Elasticserch ~]# hostname </span><br><span class="line">Elasticserch</span><br><span class="line">[root@Elasticserch ~]# cat &#x2F;etc&#x2F;redhat-release </span><br><span class="line">CentOS release 6.5 (Final)</span><br><span class="line">[root@Elasticserch ~]# uname -r</span><br><span class="line">2.6.32-431.el6.x86_64</span><br><span class="line">[root@Elasticserch ~]# &#x2F;etc&#x2F;init.d&#x2F;iptables stop          </span><br><span class="line">[root@Elasticserch ~]# setenforce 0</span><br></pre></td></tr></table></figure></li>
+<li>解压文件<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf elasticsearch-7.3.1-linux-x86_64.tar.gz</span><br><span class="line">mv $PWD&#x2F;elasticsearch-7.3.1-linux-x86_64 &#x2F;usr&#x2F;local&#x2F;elasticsearch</span><br><span class="line">cd &#x2F;usr&#x2F;local&#x2F;elasticsearch&#x2F;</span><br></pre></td></tr></table></figure></li>
+<li>配置vim config/elasticsearch.yml<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cluster.name: my-es-cluster           #集群的名称</span><br><span class="line">node.name: mspp-150                 #节点的名称</span><br><span class="line">path.data: &#x2F;usr&#x2F;local&#x2F;elasticsearch&#x2F;data   #数据路径</span><br><span class="line">path.logs: &#x2F;usr&#x2F;local&#x2F; elasticsearch &#x2F;logs    #日志路径</span><br><span class="line">bootstrap.memory_lock: false          #这行去掉注释把ture改成false，不改会造成服务启动报错</span><br><span class="line">bootstrap.system_call_filter: false      #添加这行，否则启动会报错。</span><br><span class="line">配置上述两行的原因：</span><br><span class="line">这是在因为Centos6不支持SecComp，而ES5.2.0默认bootstrap.system_call_filter为true进行检测，所以导致检测失败，失败后直接导致ES不能启动。</span><br><span class="line">network.host: 192.168.8.102          # elasticsearch主机地址</span><br><span class="line">http.port: 9200                        #端口号</span><br><span class="line">discovery.seed_hosts: [&quot;mspp-150&quot;]</span><br><span class="line">cluster.initial_master_nodes: [&quot;mspp-150&quot;]</span><br></pre></td></tr></table></figure></li>
+<li>修改句柄<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;security&#x2F;limits.d&#x2F;90-nproc.conf</span><br><span class="line">*          soft    nproc     4096   #默认1024，改成4096</span><br><span class="line">vim &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line">#末尾追加否则服务会报错。</span><br><span class="line">vm.max_map_count&#x3D;655360</span><br><span class="line">sysctl -p   #使上述配置生效</span><br><span class="line">vim &#x2F;etc&#x2F;security&#x2F;limits.conf</span><br><span class="line">#添加下面内容：</span><br><span class="line">*               soft    nofile           65536</span><br><span class="line">*               hard    nofile           65536</span><br><span class="line">*               soft    nproc           65536</span><br><span class="line">*               hard    nproc           65536</span><br></pre></td></tr></table></figure></li>
+<li>创建用户<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">useradd elasticsearch</span><br><span class="line">chown -R elasticsearch.elasticsearch &#x2F;usr&#x2F;local&#x2F;elasticsearch&#x2F;</span><br></pre></td></tr></table></figure></li>
+<li>启动<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">su – elasticsearch</span><br><span class="line">cd &#x2F;usr&#x2F;local&#x2F;elasticsearch&#x2F;</span><br><span class="line">nohup bin&#x2F;elasticsearch &amp;</span><br></pre></td></tr></table></figure></li>
+<li>开放端口<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;sysconfig&#x2F;iptables  打开配置文件加入如下语句:</span><br><span class="line">-A INPUT -p tcp -m state --state NEW -m tcp --dport 9200 -j DROP   </span><br><span class="line">重启防火墙</span><br><span class="line">service iptables restart</span><br></pre></td></tr></table></figure></li>
+<li>创建索引<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">PUT &#x2F;mspp</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;properties&quot;: &#123;</span><br><span class="line">      &quot;traceid&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;text&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;class&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;text&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;level&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;text&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;pid&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;integer&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;thread&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;text&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;msg&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;timestamp&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;date&quot;,</span><br><span class="line">        &quot;format&quot;: &quot;yyyy-MM-dd HH:mm:ss.SSS&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="添加xpack权限管理"><a href="#添加xpack权限管理" class="headerlink" title="添加xpack权限管理"></a>添加xpack权限管理</h3></li>
+<li>elasticsearch.yml中添加<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xpack.security.enabled: true</span><br><span class="line">xpack.security.transport.ssl.enabled: true</span><br></pre></td></tr></table></figure></li>
+<li>配置系统用户密码<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"> .\elasticsearch-setup-passwords.bat interactive</span><br><span class="line">future versions of Elasticsearch will require Java 11; your Java version from [D:\jdk\jdk1.8.0_192\jre] does not meet this requirement</span><br><span class="line">Initiating the setup of passwords for reserved users elastic,apm_system,kibana,logstash_system,beats_system,remote_monitoring_user.</span><br><span class="line">You will be prompted to enter passwords as the process progresses.</span><br><span class="line">Please confirm that you would like to continue [y&#x2F;N]y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Enter password for [elastic]:</span><br><span class="line">passwords must be at least [6] characters long</span><br><span class="line">Try again.</span><br><span class="line">Enter password for [elastic]:</span><br><span class="line">Reenter password for [elastic]:</span><br><span class="line">Enter password for [apm_system]:</span><br><span class="line">Reenter password for [apm_system]:</span><br><span class="line">Enter password for [kibana]:</span><br><span class="line">Reenter password for [kibana]:</span><br><span class="line">Enter password for [logstash_system]:</span><br><span class="line">Reenter password for [logstash_system]:</span><br><span class="line">Enter password for [beats_system]:</span><br><span class="line">Reenter password for [beats_system]:</span><br><span class="line">Enter password for [remote_monitoring_user]:</span><br><span class="line">Reenter password for [remote_monitoring_user]:</span><br><span class="line">Changed password for user [apm_system]</span><br><span class="line">Changed password for user [kibana]</span><br><span class="line">Changed password for user [logstash_system]</span><br><span class="line">Changed password for user [beats_system]</span><br><span class="line">Changed password for user [remote_monitoring_user]</span><br><span class="line">Changed password for user [elastic]</span><br></pre></td></tr></table></figure></li>
+<li>设置kibana用户名密码<br>在kibana的配置文件kibana.yml里面添加<br>如果你的Elasticsearch受到基本身份验证的保护，这些设置将提供Kibana服务器在启动时用于对Kibana索引进行维护的用户名和密码，你的Kibana用户仍然需要使用Elasticsearch进行身份验证，这是通过Kibana服务器进行的。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">elasticsearch.username: &quot;kibana&quot;</span><br><span class="line">elasticsearch.password: &quot;123456&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="filebeat配置文件output部分（负载均衡）"><a href="#filebeat配置文件output部分（负载均衡）" class="headerlink" title="filebeat配置文件output部分（负载均衡）"></a>filebeat配置文件output部分（负载均衡）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">output.logstash:</span><br><span class="line">  # The Logstash hosts</span><br><span class="line">  hosts: [&quot;es01:5044&quot;,&quot;es02:5044&quot;]   # 多个logstash的beats地址和端口</span><br><span class="line">  loadbalance: true  # 启动负载均衡</span><br></pre></td></tr></table></figure>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3></li>
+<li>kibana搜索<br>[<a href="https://www.cnblogs.com/Jtianlin/p/10755372.html]" target="_blank" rel="noopener">https://www.cnblogs.com/Jtianlin/p/10755372.html]</a></li>
+<li>日期搜索<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@timestamp &gt;&#x3D;   &quot;2019-09-07T16:38:35.921Z&quot; and @timestamp &lt;&#x3D; &quot;2019-09-11T16:53:42.177Z&quot;</span><br><span class="line"># [min TO max] 是闭区间</span><br><span class="line"># &#123;min TO max&#125; 是开区间</span><br><span class="line">@timestamp: [1510536210000 TO 1510550000000]</span><br><span class="line"># * 表示一端不限制范围</span><br><span class="line">count:[10 TO *]</span><br></pre></td></tr></table></figure></li>
+<li>kibana时间显示问题<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Management -&gt; Advanced settings -&gt; Timezone for date formatting </span><br><span class="line">设置成UTC</span><br></pre></td></tr></table></figure></li>
+<li>kibana @timestamp 时间少8个小时<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">date &#123;</span><br><span class="line">    match &#x3D;&gt; [&quot;PARAM_date&quot;, &quot;yyyy.MM.dd HH.mm.ss&quot;,&quot;UNIX_MS&quot;]</span><br><span class="line">    target &#x3D;&gt; &quot;@timestamp&quot;</span><br><span class="line">&#125;</span><br><span class="line">ruby &#123;</span><br><span class="line">    code &#x3D;&gt; &quot;event.set(&#39;timestamp&#39;, event.get(&#39;@timestamp&#39;).time.localtime + 8*60*60)&quot;</span><br><span class="line">&#125;</span><br><span class="line">ruby &#123;</span><br><span class="line">  code &#x3D;&gt; &quot;event.set(&#39;@timestamp&#39;,event.get(&#39;timestamp&#39;))&quot;</span><br><span class="line"> &#125;</span><br><span class="line">mutate &#123;</span><br><span class="line">    remove_field &#x3D;&gt; [&quot;timestamp&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>logstash创建索引有三种方式<ul>
+<li>最简单，无须任何配置 </li>
+<li>适合小规模集群的日志收集，需要在logstash的output插件中使用template指定本机器上的一个模板json路径， 例如  template =&gt; “/tmp/logstash.json” </li>
+<li>适合大规模集群的日志收集，如何配置，主要配置logstash的output插件中两个参数：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br></pre></td><td class="code"><pre><span class="line"> PUT _template&#x2F;mspp</span><br><span class="line">&#123;</span><br><span class="line"> &quot;index_patterns&quot;: [&quot;mspp-*&quot;],</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;index&quot;: &#123;</span><br><span class="line">      &quot;number_of_shards&quot;: 1</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;mappings&quot; : &#123;</span><br><span class="line">      &quot;properties&quot; : &#123;</span><br><span class="line">        &quot;@version&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;text&quot;,</span><br><span class="line">          &quot;fields&quot; : &#123;</span><br><span class="line">            &quot;keyword&quot; : &#123;</span><br><span class="line">              &quot;type&quot; : &quot;keyword&quot;,</span><br><span class="line">              &quot;ignore_above&quot; : 256</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;agent&quot; : &#123;</span><br><span class="line">          &quot;properties&quot; : &#123;</span><br><span class="line">            &quot;ephemeral_id&quot; : &#123;</span><br><span class="line">              &quot;type&quot; : &quot;text&quot;,</span><br><span class="line">              &quot;fields&quot; : &#123;</span><br><span class="line">                &quot;keyword&quot; : &#123;</span><br><span class="line">                  &quot;type&quot; : &quot;keyword&quot;,</span><br><span class="line">                  &quot;ignore_above&quot; : 256</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;hostname&quot; : &#123;</span><br><span class="line">              &quot;type&quot; : &quot;text&quot;,</span><br><span class="line">              &quot;fields&quot; : &#123;</span><br><span class="line">                &quot;keyword&quot; : &#123;</span><br><span class="line">                  &quot;type&quot; : &quot;keyword&quot;,</span><br><span class="line">                  &quot;ignore_above&quot; : 256</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;id&quot; : &#123;</span><br><span class="line">              &quot;type&quot; : &quot;text&quot;,</span><br><span class="line">              &quot;fields&quot; : &#123;</span><br><span class="line">                &quot;keyword&quot; : &#123;</span><br><span class="line">                  &quot;type&quot; : &quot;keyword&quot;,</span><br><span class="line">                  &quot;ignore_above&quot; : 256</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;type&quot; : &#123;</span><br><span class="line">              &quot;type&quot; : &quot;text&quot;,</span><br><span class="line">              &quot;fields&quot; : &#123;</span><br><span class="line">                &quot;keyword&quot; : &#123;</span><br><span class="line">                  &quot;type&quot; : &quot;keyword&quot;,</span><br><span class="line">                  &quot;ignore_above&quot; : 256</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;version&quot; : &#123;</span><br><span class="line">              &quot;type&quot; : &quot;text&quot;,</span><br><span class="line">              &quot;fields&quot; : &#123;</span><br><span class="line">                &quot;keyword&quot; : &#123;</span><br><span class="line">                  &quot;type&quot; : &quot;keyword&quot;,</span><br><span class="line">                  &quot;ignore_above&quot; : 256</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;class&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;text&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;ecs&quot; : &#123;</span><br><span class="line">          &quot;properties&quot; : &#123;</span><br><span class="line">            &quot;version&quot; : &#123;</span><br><span class="line">              &quot;type&quot; : &quot;text&quot;,</span><br><span class="line">              &quot;fields&quot; : &#123;</span><br><span class="line">                &quot;keyword&quot; : &#123;</span><br><span class="line">                  &quot;type&quot; : &quot;keyword&quot;,</span><br><span class="line">                  &quot;ignore_above&quot; : 256</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;input&quot; : &#123;</span><br><span class="line">          &quot;properties&quot; : &#123;</span><br><span class="line">            &quot;type&quot; : &#123;</span><br><span class="line">              &quot;type&quot; : &quot;text&quot;,</span><br><span class="line">              &quot;fields&quot; : &#123;</span><br><span class="line">                &quot;keyword&quot; : &#123;</span><br><span class="line">                  &quot;type&quot; : &quot;keyword&quot;,</span><br><span class="line">                  &quot;ignore_above&quot; : 256</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;level&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;text&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;log&quot; : &#123;</span><br><span class="line">          &quot;properties&quot; : &#123;</span><br><span class="line">            &quot;file&quot; : &#123;</span><br><span class="line">              &quot;properties&quot; : &#123;</span><br><span class="line">                &quot;path&quot; : &#123;</span><br><span class="line">                  &quot;type&quot; : &quot;text&quot;,</span><br><span class="line">                  &quot;fields&quot; : &#123;</span><br><span class="line">                    &quot;keyword&quot; : &#123;</span><br><span class="line">                      &quot;type&quot; : &quot;keyword&quot;,</span><br><span class="line">                      &quot;ignore_above&quot; : 256</span><br><span class="line">                    &#125;</span><br><span class="line">                  &#125;</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;flags&quot; : &#123;</span><br><span class="line">              &quot;type&quot; : &quot;text&quot;,</span><br><span class="line">              &quot;fields&quot; : &#123;</span><br><span class="line">                &quot;keyword&quot; : &#123;</span><br><span class="line">                  &quot;type&quot; : &quot;keyword&quot;,</span><br><span class="line">                  &quot;ignore_above&quot; : 256</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;offset&quot; : &#123;</span><br><span class="line">              &quot;type&quot; : &quot;long&quot;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;message&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;text&quot;,</span><br><span class="line">          &quot;fields&quot; : &#123;</span><br><span class="line">            &quot;keyword&quot; : &#123;</span><br><span class="line">              &quot;type&quot; : &quot;keyword&quot;,</span><br><span class="line">              &quot;ignore_above&quot; : 256</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;msg&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;keyword&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;path&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;text&quot;,</span><br><span class="line">          &quot;fields&quot; : &#123;</span><br><span class="line">            &quot;keyword&quot; : &#123;</span><br><span class="line">              &quot;type&quot; : &quot;keyword&quot;,</span><br><span class="line">              &quot;ignore_above&quot; : 256</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;pid&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;integer&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;receive_dt&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;date&quot;,</span><br><span class="line">          &quot;format&quot; : &quot;yyyy-MM-dd HH:mm:ss.SSSZ&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;request_dt&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;date&quot;,</span><br><span class="line">          &quot;format&quot; : &quot;yyyy-MM-dd HH:mm:ss.SSSZ&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;tags&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;text&quot;,</span><br><span class="line">          &quot;fields&quot; : &#123;</span><br><span class="line">            &quot;keyword&quot; : &#123;</span><br><span class="line">              &quot;type&quot; : &quot;keyword&quot;,</span><br><span class="line">              &quot;ignore_above&quot; : 256</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;thread&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;text&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;traceid&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;text&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>您的关注就是我们最大的成功</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="huangyangcong 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="huangyangcong 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    huangyangcong
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://huangyangcong.github.io/2019/09/02/elk%E9%83%A8%E7%BD%B2/" title="elk部署">https://huangyangcong.github.io/2019/09/02/elk%E9%83%A8%E7%BD%B2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/20/%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/" rel="next" title="任链模式实现的三种方式">
+                <i class="fa fa-chevron-left"></i> 任链模式实现的三种方式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/04/uid%E7%94%9F%E6%88%90%E7%AE%97%E6%B3%95/" rel="prev" title="uid生成算法">
+                uid生成算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head.jpg"
+                alt="huangyangcong" />
+            
+              <p class="site-author-name" itemprop="name">huangyangcong</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Logstash"><span class="nav-number">1.</span> <span class="nav-text">Logstash</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#metadata-foo"><span class="nav-number">1.0.1.</span> <span class="nav-text">[@metadata][foo]</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#filebeat"><span class="nav-number">2.</span> <span class="nav-text">filebeat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#elasticsearch"><span class="nav-number">3.</span> <span class="nav-text">elasticsearch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#添加xpack权限管理"><span class="nav-number">3.1.</span> <span class="nav-text">添加xpack权限管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filebeat配置文件output部分（负载均衡）"><span class="nav-number">3.2.</span> <span class="nav-text">filebeat配置文件output部分（负载均衡）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">3.3.</span> <span class="nav-text">问题</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+      
+         <div>
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="210" height="110" src="//music.163.com/outchain/player?type=2&id=33911781&auto=1&height=66"></iframe>
+         </div>
+      
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">huangyangcong</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

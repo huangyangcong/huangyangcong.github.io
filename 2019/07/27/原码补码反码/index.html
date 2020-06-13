@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans,zh-CN,zh-TW,en,ja,default">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="计算机语言," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="我们知道日常生活中使用的数分为整数和实数，整数的小数点固定在数的最右边，可以省略不写，而实数的小数点则不固定。在计算机中只能识别和表示“0”和“1”，而无法识别小数点，因此要想使得计算机能够处理日常使用的数据，小数点的问题是不可避免的。关于计算机系统中实数的表示，在下篇文章中会讲解。本篇博客我们讲解的是整数在计算机系统中如何表示。　　在各种大学教材，各种网站论坛中，对于整数编码表示方法的正确打开姿">
+<meta property="og:type" content="article">
+<meta property="og:title" content="原码补码反码">
+<meta property="og:url" content="https://huangyangcong.github.io/2019/07/27/%E5%8E%9F%E7%A0%81%E8%A1%A5%E7%A0%81%E5%8F%8D%E7%A0%81/index.html">
+<meta property="og:site_name" content="huangyangcong">
+<meta property="og:description" content="我们知道日常生活中使用的数分为整数和实数，整数的小数点固定在数的最右边，可以省略不写，而实数的小数点则不固定。在计算机中只能识别和表示“0”和“1”，而无法识别小数点，因此要想使得计算机能够处理日常使用的数据，小数点的问题是不可避免的。关于计算机系统中实数的表示，在下篇文章中会讲解。本篇博客我们讲解的是整数在计算机系统中如何表示。　　在各种大学教材，各种网站论坛中，对于整数编码表示方法的正确打开姿">
+<meta property="article:published_time" content="2019-07-26T16:05:34.000Z">
+<meta property="article:modified_time" content="2020-06-12T15:20:53.538Z">
+<meta property="article:author" content="huangyangcong">
+<meta property="article:tag" content="计算机语言">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://huangyangcong.github.io/2019/07/27/原码补码反码/"/>
+
+
+
+
+
+  <title>原码补码反码 | huangyangcong</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">huangyangcong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">独立开发</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://huangyangcong.github.io/2019/07/27/%E5%8E%9F%E7%A0%81%E8%A1%A5%E7%A0%81%E5%8F%8D%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="huangyangcong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="huangyangcong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">原码补码反码</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-27T00:05:34+08:00">
+                2019-07-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我们知道日常生活中使用的数分为整数和实数，整数的小数点固定在数的最右边，可以省略不写，而实数的小数点则不固定。<br>在计算机中只能识别和表示“0”和“1”，而无法识别小数点，因此要想使得计算机能够处理日常使用的数据，小数点的问题是不可避免的。<br>关于计算机系统中实数的表示，在下篇文章中会讲解。本篇博客我们讲解的是整数在计算机系统中如何表示。　　<br>在各种大学教材，各种网站论坛中，对于整数编码表示方法的正确打开姿势（姿势要帅）如下：</p>
+<h2 id="机器数"><a href="#机器数" class="headerlink" title="机器数"></a>机器数</h2><p>机器数（computer number）是数字在计算机中的二进制表示形式。机器数有2个特点：<br>①、符号数字化。因为计算机硬件只认识两种物理状态（用0和1表示），因此数据的正负号在机器里就用一位二进制0或者1来区分。在计算机用一个数的最高位存放符号, 0代表符号“+”，以1代表符号“-”。<br>②、机器数的大小受机器字长的限制。机器内部设备一次能表示的二进制位数叫机器的字长，一台机器的字长是固定的。字长8位叫一个字节（Byte），机器字长一般都是字节的整数倍，如字长8位、16位、32位、64位。<br>比如在字长为8的计算机中，十进制数+5，其机器数为00000101；十进制数-5，其机器数为10000101。</p>
+<h2 id="真值"><a href="#真值" class="headerlink" title="真值"></a>真值</h2><p>计算机机器数真正的值称为真值。因为机器数的最高位是符号位，所以我们在计算真值的时候要分区分开。<br>比如上面讲的机器数10000101，单纯作为一个二进制数，我们转换为十进制是133。但是其真值是不计算符号位的，其最高位的1表示”-“。所以10000101的真值为-5。</p>
+<h2 id="机器数的原码、反码、补码三种形式"><a href="#机器数的原码、反码、补码三种形式" class="headerlink" title="机器数的原码、反码、补码三种形式"></a>机器数的原码、反码、补码三种形式</h2><p>前面我们讲过机器数是在计算机中的二进制表示形式，但是在计算机中，这种表现形式又分为原码、反码、补码等三种最常用的形式。<br>ps：下面举例都是字长为8。<br><strong>①、原码</strong><br>原码=符号位+真值<br>　　比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[+5]原码&#x3D;0 0000101</span><br><span class="line">[-5]原码&#x3D;1 0000101</span><br></pre></td></tr></table></figure>
+<p>原码表示与真值对应直观，而且转换也简单。但是用原码进行加减运算的时候，会出现以下问题：<br>使用原码计算表达式：1 - 1 = 0<br>1 - 1 = 1 + （-1）= [00000001]原 + [10000001]原 = [10000010]原 = -2<br>注意：计算机是没有减法器，只有加法器，减法运算可以转换为加上那个数的负数。<br>我们发现通过原码计算1 - 1 表达式结果居然是 -2。所以早期计算机机器数采用原码编码的时候，在进行原码加减运算时，必须先判定是否是两个异号数相加或两个同号数相减，<br>若是，则必须判定两个数的绝对值大小，根据判断结果决定运算结果符号，并用绝对值大的数减去绝对值小的数。也就是说用这样一种形式进行加运算时，负数的符号位不能与其数值部分一道参加运算，而必须利用单独的线路确定符号位。<br>很显然，这样设计电路就很复杂，这是不经济实用的，为了解决这个问题，反码产生了。</p>
+<p><strong>②、反码</strong><br>反码：正数的反码与其原码相同；负数的反码是对其原码逐位取反，但符号位除外。<br>　　我们用反码来计算 1 - 1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 - 1 &#x3D; 1 + (-1) &#x3D; [0000 0001]原 + [1000 0001]原&#x3D; [0000 0001]反 + [1111 1110]反 &#x3D; [1111 1111]反 &#x3D; [1000 0000]原 &#x3D; -0</span><br></pre></td></tr></table></figure>
+<p>　　看上去结果好像是正确的了，但是大家发现没，结果是-0，虽然对于0的符号没有什么实际意义。但是在计算机中，0如果用原码和反码表示会有两种形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[+0]&#x3D;[0000 0000]原&#x3D;[0000 0000]反</span><br><span class="line">[-0]&#x3D;[1000 0000]原&#x3D;[1111 1111]反</span><br></pre></td></tr></table></figure>
+<p>两种编码就两种编码吧，只不过是多占用一个计算机表示数的编码形式。只要结果是正确的，我们还是能够忍受的，然而。。。。<br>请用反码计算表达式 2 -1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2 -1 &#x3D; 2 + (-1) &#x3D; [0000 0010]原 + [1000 0001]原 &#x3D; [0000 0010]反 + [1111 1110]反 &#x3D; [0000 0000]反 &#x3D; [0000 0000]原 &#x3D; +0</span><br></pre></td></tr></table></figure>
+<p>是不是很奇怪，原码计算 2 - 1 得到的结果居然是 0 。其实稍微分析计算过程我们也知道，再用反码进行加法运算的时候发生了进位，而由于字长为8，进位就直接省略了，便造成了错误。这肯定是不被允许的，所以采用反码的计算机解决办法如下：<br>反码的符号位相加后，如果有进位出现，则要把它送回到最低位去相加（循环进位）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2 -1 &#x3D; 2 + (-1) &#x3D; [0000 0010]原 + [1000 0001]原 &#x3D; [0000 0010]反 + [1111 1110]反+[0000 0001]循环进位 &#x3D; [0000 0001]反 &#x3D; [0000 0001]原 &#x3D; +1</span><br><span class="line">13 - 6 &#x3D; 13 + （-6）&#x3D; [0000 1101]原 + [1000 0110]原 &#x3D; [0000 1101]反 +[1111 1001]反+[0000 0001]循环进位&#x3D;[0000 0111]反 &#x3D; [0000 0111]原 &#x3D;+7</span><br></pre></td></tr></table></figure>
+<p>采用反码运算虽然较好的解决了原码运算所遇到的困难或问题，但由于循环进位需要二次算术相加，延长了计算时间，这同样给电路带来麻烦。这时候补码登场了。<br><strong>③、补码</strong><br>补码：正数的补码与原码相同，负数的补码等于其反码的末位加1<br>　　我们来看下面这个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2 - 1 &#x3D; 1</span><br><span class="line">2 -1 &#x3D; 2 + (-1) &#x3D; [0000 0010]原 + [1000 0001]原 &#x3D; [0000 0010]反 + [1111 1110]反 &#x3D; [0000 0010]补 + [1111 1111]补 &#x3D; [0000 0001]补 &#x3D; [0000 0001]原 &#x3D;+1</span><br><span class="line">9 + 12 &#x3D; 21</span><br><span class="line">9 + 12 &#x3D; [0000 1001]原 + [0000 1100]原 &#x3D; [0000 1001]补 + [0000 1100]补 &#x3D; [0001 0101]补 &#x3D; [0001 0101]原 &#x3D; 21</span><br></pre></td></tr></table></figure>
+<p>我们发现补码运算就很简单了，产生的进位直接舍去，而且不做多余的操作也解决了进位的问题。还有 +0 和 -0 的表示，在原码和反码都有两种形式，但是补码却只有一种：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[+0]&#x3D;[0000 0000]原&#x3D;[0000 0000]反&#x3D;[0000 0000]补</span><br><span class="line">[-0]&#x3D;[1000 0000]原&#x3D;[1111 1111]反&#x3D;[0000 0000]补</span><br></pre></td></tr></table></figure>
+<p>就这样我们完美的解决了计算机中整数运算的问题。计算机的机器数采用补码的形式，我们在做算术运算的时候，既不需要额外的判断，又能得到准确的结果。<br>看上去本文应该结束了，然而……<br>请求出 127+1 的值</p>
+<h2 id="溢出"><a href="#溢出" class="headerlink" title="溢出"></a>溢出</h2><p>接着上面抛出的问题，127+1的值，我们现在程序中看看：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">byte</span> x = <span class="number">127</span>;</span><br><span class="line">    <span class="keyword">byte</span> y = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">byte</span> k = (<span class="keyword">byte</span>) (x+y);</span><br><span class="line">    System.out.println(k); <span class="comment">//-128</span></span><br><span class="line">    System.out.println(Byte.MIN_VALUE+<span class="string">"~"</span>+Byte.MAX_VALUE); <span class="comment">//-128~127</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>byte在计算机正好是一个字节，也就是8位二进制序列。我们发现127+1结果不是128，反而是-128，这就是结果发生了溢出。因为byte表示数的范围是-128-127,128超出了这个范围。用补码计算如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 + 127 &#x3D; [0000 0001]原 + [0111 1111]原 &#x3D; [0000 0001]补 + [0111 1111]补 &#x3D; [1000 0000]补</span><br></pre></td></tr></table></figure>
+<p>我们发现这个数的符号位没有发生进位，但是数值最高位发生了进位。在看前面的2-1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2 -1 &#x3D; 2 + (-1) &#x3D; [0000 0010]原 + [1000 0001]原 &#x3D; [0000 0010]补 + [1111 1111]补 &#x3D; [0000 0001]补 &#x3D; [0000 0001]原 &#x3D;+1</span><br></pre></td></tr></table></figure>
+<p>这个表达式符号位和数值最高位发生了进位，但是结果却是正确的。总结如下：<br><strong>只有一个高位进位或者符号位进位就为溢出的规则。</strong><br>溢出是每种编码在运算时都不可避免的，一般来讲结果超过字长所表示数的范围都会发生溢出。而判断机器是正常进位还是溢出的基本依据，在微型机中可用异或电路来实现上述的判断。<br>在实际编码中解决办法也很简单，就是将结果用更大范围的编码形式接收即可。比如两个byte类型的数相加，我们用 int 来接收即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">byte</span> x = <span class="number">127</span>;</span><br><span class="line">    <span class="keyword">byte</span> y = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> k = x+y;</span><br><span class="line">    System.out.println(k); <span class="comment">//128</span></span><br><span class="line">    System.out.println(Byte.MIN_VALUE+<span class="string">"~"</span>+Byte.MAX_VALUE); <span class="comment">//-128~127</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以我们可以说用补码进行运算，在不考虑溢出的情况下，结果都是正确的。确实也是这样，但是……<br>请求出 -128 的补码？</p>
+<h2 id="剧情反转"><a href="#剧情反转" class="headerlink" title="剧情反转"></a>剧情反转</h2><p>　　上面的给出的问题，-128 的补码，我们首先想到去求它的原码，嗯，原码应该是 [1000 0000]，不对，第一位不是符号位吗，[1000 0000]应该表示 -0。<br>那应该怎么用原码表示 -128呢，我们发现字长为 8 的计算机用原码是无法表示的，反码也是一样。我们看看补码，用 -127- 1 的表达式结果来计算 -128 的补码：<br>(-1) + (-127) = [1000 0001]原 + [1111 1111]原 = [1111 1111]补 + [1000 0001]补 = [1000 0000]补<br>-128的补码形式为 [1000 0000]，我们能通过算术表达式得到某个数的补码形式，但是为什么直接就求不出来？那么计算机自己是怎么实现的呢？<br>再来看这样一个问题：我们日常使用的钟表，比如现在钟表指向的是 10点钟，我要将钟表调整到 6 点钟，则有两种拨法：</p>
+<p>①、顺时针将时针拨动 8 格<br>②、逆时针将时针拨动 4 (12-8) 格<br>由此给大家普及一个概念叫 “模”，钟表便是一个典型的模运算系统，其模数为12。<br>同理，对于十进制两位数，在将结果百位舍掉的情况下，50可以用60-10得到，或者60+90得到。这里的90也就是100-10得来的，那么我们就说十进制两位数运算系统的模数为100。<br>我们判定：两个相加等于模的数互为补数。<br>在模表示的范围内做减法运算，可以将“X－Y”的减法变更为“X＋Y的补数“的加法，当然这里不考虑结果溢出。<br>上面我们举的例子都是大数减小数，如果是小数减大数会怎样？<br>如果是10-80，结果应该是-70。但是如果按照 10+（100-20）的说法，结果应该是30。很明显，30和-70不是同一个结果，而且也没有产生百位进位。那我们应该怎么办呢？<br>解决办法很简单，就是让这两个数相等，而且这正好解决了负数的表示方法，-70的绝对值的补数正好是30。<br>但是问题又来了，这里的30已经表示正数30了，现在又表示负数-70，那我们怎么知道它到底表示哪个数？<br>为了解决这个问题，我们给这套规则规定一个范围，原来是0～99的正数，现在既然要用部分正数来代替负数了，那就要规定一个范围来使得一个数只代表一个含义，正好一人一半，0～49这个区间就代表正数，50～99的区间就用来代表各自补数的负值，</p>
+<p>例：98就代表－2<br>所以0-99的编码数可以表示的数的范围为 -50-49。<br>我们解决了十进制两位数的减法运算，那么在字长为 8 的计算机系统中，我们又该如何呢？<br>8位二进制数可以表示的数为2的8次方，0-255，一共 256 个数，0也要占用一位数。所以我们说 256 是8 位二进制数的模，这和上面说的十进制两位数0-99，模为100是一样的。<br>我们按照前面讲的逻辑，一半的数0-127，代表其正数本身，另一半的数128-255表示其补数的负值，即-1<del>-128。<br>所以而 “X－Y”的减法 就用 “X＋Y的补数” 的加法来表示，即将减法的形式转换为加法的形式了，而且计算结果还是正确的。<br>注意：这里还是一样，不考虑结果的溢出，也就是计算值和结算结果都必须在-128</del>127之间，一旦超过这个范围，结果就不准了，这也是程序员日常编码说的int=int+int，如果结果大于int类型表示的范围，那得出来的结果肯定不准。<br>由此我们得出来的结论是：<br>计算机编码其实并没有什么所谓的符号位，但是由于计算机没有减法运算，为了将负数变为某个可以运算的编码来进行加法运算，补码产生了。这也间接说明了正数的补码是不变的，而负数的解决办法是首位不变，其余的取反再加1。<br>我们上面说的补码怎么得来的，<strong>就是 模-绝对值 。</strong><br>所以这个时候我说让你求 -128的补码，你马上就会知<br>256 - |-128|＝128 而128的二进制补码是不是就是 [1 0 0 0 0 0 0 0]<br>让你求 -1 的补码，你马上就会知<br>256 - |-1| = 255，其255的二进制补码形式就是[1111 1111]<br>注意：关于这样求补码的具体数学证明，请参考《计算机组成与系统结构》。
+　　</p>
+<h2 id="为何这样求补码"><a href="#为何这样求补码" class="headerlink" title="为何这样求补码"></a>为何这样求补码</h2><p>计算机里的129即表示-127，相当于模256为一圈，顺时针的129则和逆时针127即-127是一样的。<br>故可以得到以下结论：<br><strong>负数的补码为模减去该数的绝对值。</strong><br>本篇文章你可以直接从第 5 点开始看，忘掉计算机编码的什么首位符号位，忘掉计算机补码是由原码取反加1，回归简单直白的理解。计算机是机器，硬件能理解的只有高低电平，也就是0或者1。<br>它知道什么是符号位吗？这些规则只不过是为了更好的完成减法运算所yy出来的。</p>
+<p>作者：IT可乐<br>链接：<a href="https://www.imooc.com/article/21360" target="_blank" rel="noopener">https://www.imooc.com/article/21360</a><br>来源：慕课网<br>本文原创发布于慕课网 ，转载请注明出处，谢谢合作</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>您的关注就是我们最大的成功</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="huangyangcong 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="huangyangcong 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    huangyangcong
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://huangyangcong.github.io/2019/07/27/%E5%8E%9F%E7%A0%81%E8%A1%A5%E7%A0%81%E5%8F%8D%E7%A0%81/" title="原码补码反码">https://huangyangcong.github.io/2019/07/27/%E5%8E%9F%E7%A0%81%E8%A1%A5%E7%A0%81%E5%8F%8D%E7%A0%81/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%AF%AD%E8%A8%80/" rel="tag"># 计算机语言</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/25/maven%E7%89%B9%E6%AE%8A%E5%91%BD%E4%BB%A4/" rel="next" title="maven特殊命令">
+                <i class="fa fa-chevron-left"></i> maven特殊命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/06/dubbo%E6%9C%8D%E5%8A%A1%E6%8E%A5%E6%94%B6%E8%BF%87%E7%A8%8B/" rel="prev" title="dubbo服务接收过程">
+                dubbo服务接收过程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head.jpg"
+                alt="huangyangcong" />
+            
+              <p class="site-author-name" itemprop="name">huangyangcong</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#机器数"><span class="nav-number">1.</span> <span class="nav-text">机器数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#真值"><span class="nav-number">2.</span> <span class="nav-text">真值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#机器数的原码、反码、补码三种形式"><span class="nav-number">3.</span> <span class="nav-text">机器数的原码、反码、补码三种形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#溢出"><span class="nav-number">4.</span> <span class="nav-text">溢出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#剧情反转"><span class="nav-number">5.</span> <span class="nav-text">剧情反转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为何这样求补码"><span class="nav-number">6.</span> <span class="nav-text">为何这样求补码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+      
+         <div>
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="210" height="110" src="//music.163.com/outchain/player?type=2&id=33911781&auto=1&height=66"></iframe>
+         </div>
+      
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">huangyangcong</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
